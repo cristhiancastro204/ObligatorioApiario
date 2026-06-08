@@ -11,5 +11,6 @@ namespace ObligatorioApiario.Data
         }
 
         public DbSet<Apiario> Apiarios { get; set; }
+        public DbSet<Tarea> Tareas { get; set; }
     }
 }

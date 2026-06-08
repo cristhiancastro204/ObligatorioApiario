@@ -1,0 +1,73 @@
+@model IEnumerable<ObligatorioApiario.Models.TareaViewModel>
+
+@{
+    ViewData["Title"] = "Tareas Programadas";
+}
+
+<div class="calendar-header" style="margin-bottom: 2rem;">
+    <div>
+        <h1 class="calendar-title">Tareas Programadas</h1>
+        <p class="page-description" style="margin-bottom: 0; color: #666;">Gestión y seguimiento de actividades en los apiarios.</p>
+    </div>
+    <div class="sort-container" style="background-color: #fff; padding: 10px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+        <form asp-action="Index" method="get" id="sortForm" style="display: flex; align-items: center; gap: 10px;">
+            <label for="ordenarPor" style="font-size: 0.85rem; color: #666; font-weight: 500;">Ordenar por:</label>
+            <select name="ordenarPor" id="ordenarPor" onchange="document.getElementById('sortForm').submit()" style="border: none; background-color: #f7f3e8; padding: 8px 15px; border-radius: 8px; font-weight: 700; color: #8c5a3c; cursor: pointer; outline: none; font-size: 0.9rem;">
+                @if (ViewBag.OrdenActual == "prioridad")
+                {
+                    <option value="prioridad" selected>Prioridad</option>
+                    <option value="fecha">Fecha</option>
+                }
+                else
+                {
+                    <option value="prioridad">Prioridad</option>
+                    <option value="fecha" selected>Fecha</option>
+                }
+            </select>
+        </form>
+    </div>
+</div>
+
+<div class="task-grid">
+    @foreach (var tarea in Model)
+    {
+        var badgeClass = tarea.NivelPrioridad.ToLower() == "alta" ? "badge-alta" : tarea.NivelPrioridad.ToLower() == "media" ? "badge-media" : "badge-baja";
+        
+        <div class="task-card">
+            <div class="task-card-header">
+                <div class="task-icon">
+                    <i class="@tarea.Icono"></i>
+                </div>
+                <div class="task-badge @badgeClass">@tarea.NivelPrioridad</div>
+            </div>
+            <h3 class="task-card-title">@tarea.Titulo</h3>
+            <p class="task-card-desc">@tarea.Descripcion</p>
+            
+            <div class="task-card-footer">
+                <div class="task-meta">
+                    <i class="fa-regular fa-calendar"></i> Fecha: <strong>@tarea.FechaVencimiento.ToString("dd MMM, yyyy", new System.Globalization.CultureInfo("es-ES"))</strong>
+                </div>
+                <div class="task-meta">
+                    <i class="fa-solid fa-location-dot"></i> Apiario: <strong>@tarea.NombreApiario</strong>
+                </div>
+            </div>
+
+            <hr style="border-top: 1px solid #e8e3dc; margin: 1.5rem 0 1rem 0;" />
+
+            <div class="apiario-card-actions d-flex gap-4">
+                <a asp-action="Edit" asp-route-id="@tarea.Id" class="action-icon" style="color: #7a6e62; font-size: 1.1rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#8c4b14'" onmouseout="this.style.color='#7a6e62'">
+                    <i class="fa-solid fa-pen"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@tarea.Id" class="action-icon" style="color: #d9534f; font-size: 1.1rem; text-decoration: none; transition: color 0.2s; margin-left: 15px;" onmouseover="this.style.color='#c9302c'" onmouseout="this.style.color='#d9534f'">
+                    <i class="fa-regular fa-trash-can"></i>
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="bottom-action-bar" style="margin-top: 3rem;">
+    <a asp-action="Create" class="btn-primary btn-wide" style="display: inline-block; padding: 12px 30px; font-weight: 700; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; max-width: 300px; margin: 0 auto; box-sizing: border-box;">
+        <i class="fa-solid fa-circle-plus"></i> Nueva Tarea
+    </a>
+</div>

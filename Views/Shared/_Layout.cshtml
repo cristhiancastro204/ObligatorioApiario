@@ -32,11 +32,11 @@
                 <a asp-controller="Apiarios" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Apiarios" ? "active" : "")">
                     <i class="fa-solid fa-boxes-stacked"></i> Apiarios
                 </a>
-                <a href="#" class="nav-item">
+                <a asp-controller="Calendario" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Calendario" ? "active" : "")">
                     <i class="fa-regular fa-calendar"></i> Calendario
                 </a>
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-clipboard-list"></i> Tareas
+                <a asp-controller="Tareas" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Tareas" ? "active" : "")">
+                    <i class="fa-regular fa-circle-check"></i> Tareas
                 </a>
             </nav>
 
