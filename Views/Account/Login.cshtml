@@ -1,0 +1,36 @@
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Login";
+}
+
+<div class="login-page">
+    <div class="login-background"></div>
+    
+    <div class="login-card-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Bienvenido de nuevo</h1>
+                <p> Inicia sesion para continuar</p>
+            </div>
+
+            <form asp-action="Login" method="post" class="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="Username">Usuario</label>
+                    <input type="text" id="Username" name="username" class="form-input login-input" placeholder="Nombre de usuario" required />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="Password">Contraseña</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="Password" name="password" class="form-input login-input password-field" placeholder="Contraseña" required />
+                        <i class="fa-regular fa-eye-slash password-toggle-icon"></i>
+                    </div>
+                </div>
+
+                <div class="login-actions mt-4">
+                    <button type="submit" class="btn-primary btn-login-submit">Iniciar sesión</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+@model ObligatorioApiario.Models.Apiario
+
+@{
+    ViewData["Title"] = "Eliminar Apiario";
+}
+
+<div style="max-width: 600px; margin: 0 auto; padding-top: 2rem;">
+    <div class="apiarios-header">
+        <h1 class="page-title text-center" style="color: #d9534f;">Eliminar Apiario</h1>
+        <p class="page-description text-center mb-4">¿Estás seguro de que deseas eliminar este apiario?</p>
+    </div>
+
+    <div class="card p-4 text-center" style="border-top: 4px solid #d9534f;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: #d9534f; margin-bottom: 1rem;"></i>
+        <h2>@Model.Nombre</h2>
+        <p class="text-muted mt-2"><strong>ID:</strong> API-@Model.Id.ToString("D4")</p>
+        <p class="text-muted"><strong>Zona:</strong> @(string.IsNullOrEmpty(Model.Zona) ? "Sin Zona" : Model.Zona)</p>
+
+        <div class="alert alert-warning mt-4 text-left" style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 8px; padding: 15px;">
+            <strong>¡Atención!</strong> Esta acción es irreversible. Se eliminarán permanentemente todos los datos asociados a este apiario.
+        </div>
+
+        <form asp-action="Delete" method="post" class="mt-4 d-flex justify-content-center gap-3">
+            <input type="hidden" asp-for="Id" />
+            <a asp-action="Index" class="btn-outline">Cancelar</a>
+            <button type="submit" class="btn-primary" style="background-color: #d9534f; border-color: #d9534f;">
+                <i class="fa-regular fa-trash-can"></i> Confirmar Eliminación
+            </button>
+        </form>
+    </div>
+</div>
