@@ -1,0 +1,197 @@
+@model ObligatorioApiario.Models.Apiario
+
+@{
+    ViewData["Title"] = "Detalle de Apiario";
+}
+
+<!-- Incluir CSS de Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+
+<div class="details-page-container" style="max-width: 1200px; margin: 0 auto; padding-bottom: 2rem;">
+    
+    <div class="breadcrumb mb-2" style="font-size: 0.8rem; font-weight: 600; color: #7a6e62; letter-spacing: 0.5px;">
+        <span>Apiarios</span> <i class="fa-solid fa-chevron-right mx-2" style="font-size: 0.6rem;"></i> 
+        <span style="color: #8c4b14; text-transform: uppercase;">Vista General</span>
+    </div>
+
+    <div class="details-header d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-title" style="margin: 0; font-size: 2.2rem; font-weight: 800; color: #8c4b14;">Detalle de Apiario</h1>
+        <div class="header-actions d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-outline" style="border-radius: 8px; padding: 6px 16px; font-size: 0.9rem;">
+                <i class="fa-solid fa-pen" style="color: #7a6e62; margin-right: 5px;"></i> Editar
+            </a>
+            <button class="btn-outline" style="border-radius: 8px; padding: 6px 16px; font-size: 0.9rem;" onclick="navigator.clipboard.writeText(window.location.href); alert('¡Enlace del apiario copiado al portapapeles!');">
+                <i class="fa-solid fa-share-nodes" style="color: #7a6e62; margin-right: 5px;"></i> Compartir
+            </button>
+        </div>
+    </div>
+
+    <div class="details-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+        
+        <!-- COLUMNA IZQUIERDA: MAPA -->
+        <div class="card map-detail-card" style="display: flex; flex-direction: column; overflow: hidden; border-radius: 12px; height: 100%; min-height: 500px;">
+            <div class="card-header d-flex justify-content-between align-items-center" style="padding: 16px 20px; border-bottom: 1px solid #e8e3dc; background: white;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: #2d261e; display: flex; align-items: center;">
+                    <div style="background-color: #f7e6d9; padding: 6px; border-radius: 6px; margin-right: 12px; color: #8c4b14; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-regular fa-map"></i>
+                    </div>
+                    Ubicación del Apiario
+                </div>
+                <div style="background-color: #f4ece4; padding: 4px 12px; border-radius: 16px; font-size: 0.85rem; font-weight: 600; color: #5c4e40;">
+                    <i class="fa-solid fa-location-dot" style="color: #7a6e62; margin-right: 4px;"></i> @(string.IsNullOrEmpty(Model.Zona) ? "Sin Zona" : Model.Zona)
+                </div>
+            </div>
+            <!-- Mapa interactivo -->
+            <div id="satellite-map" style="flex: 1; width: 100%; z-index: 1;"></div>
+        </div>
+
+        <!-- COLUMNA DERECHA: DATOS Y NOTAS -->
+        <div class="details-right-col" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- Tarjeta Datos Técnicos -->
+            <div class="card p-4" style="border-radius: 12px;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #2d261e; margin-bottom: 20px; display: flex; align-items: center;">
+                    <i class="fa-solid fa-chart-simple" style="color: #8c4b14; margin-right: 10px;"></i> Datos Técnicos del Apiario
+                </h3>
+
+                <div class="data-rows" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Latitud -->
+                    <div class="data-row d-flex justify-content-between align-items-center" style="background-color: #f8f6f4; padding: 10px 16px; border-radius: 8px;">
+                        <span style="color: #7a6e62; font-size: 0.9rem; display: flex; align-items: center;">
+                            <i class="fa-solid fa-up-down" style="width: 20px; text-align: center; margin-right: 8px;"></i> Latitud
+                        </span>
+                        <span style="font-weight: 700; color: #2d261e; font-size: 0.9rem;">@Model.Latitud.ToString("0.0000", System.Globalization.CultureInfo.InvariantCulture)°</span>
+                    </div>
+                    <!-- Longitud -->
+                    <div class="data-row d-flex justify-content-between align-items-center" style="background-color: #f8f6f4; padding: 10px 16px; border-radius: 8px;">
+                        <span style="color: #7a6e62; font-size: 0.9rem; display: flex; align-items: center;">
+                            <i class="fa-solid fa-earth-americas" style="width: 20px; text-align: center; margin-right: 8px;"></i> Longitud
+                        </span>
+                        <span style="font-weight: 700; color: #2d261e; font-size: 0.9rem;">@Model.Longitud.ToString("0.0000", System.Globalization.CultureInfo.InvariantCulture)°</span>
+                    </div>
+                    <!-- Zona -->
+                    <div class="data-row d-flex justify-content-between align-items-center" style="background-color: #f8f6f4; padding: 10px 16px; border-radius: 8px;">
+                        <span style="color: #7a6e62; font-size: 0.9rem; display: flex; align-items: center;">
+                            <i class="fa-solid fa-border-all" style="width: 20px; text-align: center; margin-right: 8px;"></i> Zona
+                        </span>
+                        <span style="font-weight: 700; color: #2d261e; font-size: 0.9rem;">@(string.IsNullOrEmpty(Model.Zona) ? "S/D" : Model.Zona)</span>
+                    </div>
+                </div>
+
+                <div class="health-status mt-4 pt-4" style="border-top: 1px solid #e8e3dc;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span style="font-size: 0.9rem; color: #7a6e62;">Estado de Salud</span>
+                        <span style="background-color: #e6f6eb; color: #2e8b57; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">Óptimo</span>
+                    </div>
+                    <div class="progress-bg" style="background-color: #e8e3dc; height: 6px; border-radius: 3px; width: 100%; overflow: hidden;">
+                        <div class="progress-bar" style="background-color: #8c4b14; height: 100%; width: 85%; border-radius: 3px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta Notas -->
+            <div class="card p-4" style="border-radius: 12px; flex: 1;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: #2d261e; margin: 0; display: flex; align-items: center;">
+                        <i class="fa-solid fa-bars-staggered" style="color: #8c4b14; margin-right: 10px;"></i> Notas
+                    </h3>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" style="color: #8c4b14; font-size: 0.9rem; font-weight: 600; text-decoration: none;">Editar</a>
+                </div>
+                
+                <div class="notes-content" style="background-color: #fdfbf7; border: 1.5px dashed #d4c4b7; border-radius: 8px; padding: 16px; height: 100%; min-height: 120px;">
+                    <p style="color: #7a6e62; font-size: 0.9rem; line-height: 1.5; margin: 0;">
+                        @(string.IsNullOrEmpty(Model.Notas) ? "No hay notas adicionales para este apiario." : Model.Notas)
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FILA INFERIOR: TARJETAS PEQUEÑAS -->
+    <div class="bottom-stats-grid mt-4" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        
+        <!-- Última Revisión -->
+        <div class="card bottom-stat-card" style="padding: 20px; border-radius: 12px; display: flex; flex-direction: row; align-items: center; gap: 16px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 15px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';">
+            <div style="background-color: #fdf3e8; width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-regular fa-calendar" style="color: #d48e45; font-size: 1.2rem;"></i>
+            </div>
+            <div>
+                <span class="d-block" style="font-size: 0.75rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">ÚLTIMA REVISIÓN</span>
+                <span class="d-block mt-1" style="font-size: 1rem; font-weight: 700; color: #2d261e;">Hace 4 días</span>
+            </div>
+        </div>
+
+        <!-- Cosecha Estimada -->
+        <div class="card bottom-stat-card" style="padding: 20px; border-radius: 12px; display: flex; flex-direction: row; align-items: center; gap: 16px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 15px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';">
+            <div style="background-color: #fdf3e8; width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-basket-shopping" style="color: #d48e45; font-size: 1.2rem;"></i>
+            </div>
+            <div>
+                <span class="d-block" style="font-size: 0.75rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">COSECHA ESTIMADA</span>
+                <span class="d-block mt-1" style="font-size: 1rem; font-weight: 700; color: #2d261e;">240 kg</span>
+            </div>
+        </div>
+
+        <!-- Alertas Sanitarias -->
+        <div class="card bottom-stat-card" style="padding: 20px; border-radius: 12px; display: flex; flex-direction: row; align-items: center; gap: 16px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 15px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';">
+            <div style="background-color: #fcedec; width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-bug" style="color: #d9534f; font-size: 1.2rem;"></i>
+            </div>
+            <div>
+                <span class="d-block" style="font-size: 0.75rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">ALERTAS SANITARIAS</span>
+                <span class="d-block mt-1" style="font-size: 1rem; font-weight: 700; color: #2d261e;">0 Activas</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Leer coordenadas desde el modelo de C# pasadas a JavaScript
+            var lat = parseFloat('@Model.Latitud.ToString(System.Globalization.CultureInfo.InvariantCulture)');
+            var lng = parseFloat('@Model.Longitud.ToString(System.Globalization.CultureInfo.InvariantCulture)');
+            
+            // Si las coordenadas están corruptas por un bug previo, las ajustamos
+            if(isNaN(lat)) lat = 0;
+            if(isNaN(lng)) lng = 0;
+            lat = Math.max(-90, Math.min(90, lat));
+            lng = Math.max(-180, Math.min(180, lng));
+
+            // Inicializar el mapa
+            var map = L.map('satellite-map').setView([lat, lng], 16);
+
+            // Capa Satelital de ESRI (Gratuita y de altísima calidad)
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                maxZoom: 18
+            }).addTo(map);
+
+            // Crear un icono personalizado estilo "colmena" (Naranja con borde blanco)
+            var customIcon = L.divIcon({
+                className: 'custom-hive-icon',
+                html: "<div style='background-color: #fca074; border: 3px solid white; width: 36px; height: 36px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; transform: rotate(45deg);'><div style='transform: rotate(-45deg);'><i class='fa-solid fa-layer-group' style='color: white; font-size: 1.1rem;'></i></div></div>",
+                iconSize: [36, 36],
+                iconAnchor: [18, 18],
+                popupAnchor: [0, -20]
+            });
+
+            // Agregar el Pin con el icono personalizado
+            var marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
+            
+            var popupContent = `
+                <div style="text-align: center; padding: 2px;">
+                    <strong style="color: #8c4b14;">@Model.Nombre</strong><br>
+                    <span style="font-size: 0.8rem; color: #7a6e62;">ID: API-@Model.Id.ToString("D4")</span>
+                </div>
+            `;
+            marker.bindPopup(popupContent).openPopup();
+            
+            // Pequeño truco para asegurar que el mapa se renderice bien dentro de contenedores flex
+            setTimeout(function(){ map.invalidateSize(); }, 100);
+        });
+    </script>
+}

@@ -1,0 +1,68 @@
+@model ObligatorioApiario.Models.CalendarViewModel
+
+@{
+    ViewData["Title"] = "Calendario";
+}
+
+<h2 style="font-size: 1.25rem; font-weight: 700; color: #8c5a3c; margin-bottom: 2rem; margin-top: -1rem;">Calendario de Actividades</h2>
+
+<div class="calendar-header">
+    <h1 class="calendar-title">@Model.MonthName @Model.CurrentYear</h1>
+    <div class="calendar-controls">
+        <div class="btn-today">
+            <a asp-action="Index" asp-route-year="@Model.PreviousYear" asp-route-month="@Model.PreviousMonth" class="btn-icon" style="text-decoration: none;"><i class="fa-solid fa-chevron-left"></i></a>
+            <a asp-action="Index" style="text-decoration: none; color: inherit;">Mes</a>
+            <a asp-action="Index" asp-route-year="@Model.NextYear" asp-route-month="@Model.NextMonth" class="btn-icon" style="text-decoration: none;"><i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+    </div>
+</div>
+
+<div class="calendar-grid-container">
+    <div class="calendar-grid">
+        <!-- Headers -->
+        <div class="calendar-day-header">Lunes</div>
+        <div class="calendar-day-header">Martes</div>
+        <div class="calendar-day-header">Miércoles</div>
+        <div class="calendar-day-header">Jueves</div>
+        <div class="calendar-day-header">Viernes</div>
+        <div class="calendar-day-header">Sábado</div>
+        <div class="calendar-day-header">Domingo</div>
+
+        <!-- Dynamic Days Grid -->
+        @foreach (var day in Model.Days)
+        {
+            var cellClass = day.IsOtherMonth ? "calendar-cell other-month" : "calendar-cell";
+            var style = "";
+            var numStyle = "";
+
+            // Para el caso de "VIS Inspección" en la imagen original, tenía un borde y fondo especial
+            // Agregaremos esta lógica solo para que se vea idéntico si el evento es el de inspección
+            if (day.Events.Any(e => e.Type == "red"))
+            {
+                style = "background-color: #faf5eb; border: 1px solid #e1b992;";
+                numStyle = "color: #8c5a3c;";
+            }
+
+            <div class="@cellClass" style="@style">
+                <span class="day-number" style="@numStyle">@day.DayNumber</span>
+                
+                @foreach (var ev in day.Events)
+                {
+                    var eventClass = ev.Type == "red" ? "calendar-event event-red" : "calendar-event event-yellow";
+                    
+                    <div class="@eventClass">
+                        @if (!string.IsNullOrEmpty(ev.IconClass))
+                        {
+                            <i class="@ev.IconClass" style="font-size: 0.6rem;"></i> 
+                        }
+                        @ev.Title
+                        @if (ev.Type == "red")
+                        {
+                            <div class="event-dot"></div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

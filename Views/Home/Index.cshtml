@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="empty-state-container">
+    <div class="empty-state">
+        <div class="empty-state-icon-wrapper">
+            <i class="fa-solid fa-location-dot empty-state-icon"></i>
+        </div>
+        
+        <h1>Comienza tu jornada</h1>
+        
+        <p>Organiza tus colmenas con precisión. Define una nueva ubicación para expandir tu producción apícola hoy mismo.</p>
+        
+        <a asp-controller="Apiarios" asp-action="Create" class="btn-primary">
+            Agregar apiario <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+</div>

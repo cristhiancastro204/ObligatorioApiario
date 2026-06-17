@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Zanganos S.A.</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome para los íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- BARRA LATERAL (SIDEBAR) -->
+        <aside class="sidebar">
+            <a asp-controller="Home" asp-action="Index" class="sidebar-brand">
+                <div class="brand-icon"></div>
+                <div class="brand-text">
+                    <span class="brand-title">Zanganos</span>
+                    <span class="brand-subtitle">Gestión Apícola</span>
+                </div>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a asp-controller="Home" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
+                    <i class="fa-solid fa-border-all"></i> Inicio
+                </a>
+                <a asp-controller="Apiarios" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Apiarios" ? "active" : "")">
+                    <i class="fa-solid fa-boxes-stacked"></i> Apiarios
+                </a>
+                <a asp-controller="Calendario" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Calendario" ? "active" : "")">
+                    <i class="fa-regular fa-calendar"></i> Calendario
+                </a>
+                <a asp-controller="Tareas" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Tareas" ? "active" : "")">
+                    <i class="fa-regular fa-circle-check"></i> Tareas
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-gear"></i> Configuración
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fa-regular fa-circle-question"></i> Ayuda
+                </a>
+            </div>
+        </aside>
+
+        <!-- ÁREA PRINCIPAL -->
+        <main class="main-content">
+            <!-- BARRA SUPERIOR (TOPBAR) -->
+            <header class="topbar">
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="search-input" placeholder="Buscar en la colmena...">
+                </div>
+
+                <div class="topbar-right">
+                    <button class="notification-btn" aria-label="Notificaciones">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+
+                    <div class="user-profile">
+                        <div class="user-info">
+                            <span class="user-name">Apicultor Principal</span>
+                            <span class="user-role">Temporada 2024</span>
+                        </div>
+                        <img src="https://ui-avatars.com/api/?name=Matías+Verges&background=eebb99&color=8c5a3c" alt="Avatar Usuario" class="user-avatar" />
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTENIDO DE PÁGINA -->
+            <div class="page-content">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

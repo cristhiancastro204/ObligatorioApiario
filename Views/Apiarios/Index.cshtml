@@ -1,0 +1,108 @@
+@model IEnumerable<ObligatorioApiario.Models.Apiario>
+
+@{
+    ViewData["Title"] = "Mis Apiarios";
+}
+
+<div class="apiarios-header">
+    <h1 class="page-title text-center">Mis Apiarios</h1>
+    <p class="page-description text-center mb-4">Gestionando @Model.Count() ubicaciones activas </p>
+</div>
+
+<div class="apiarios-grid">
+    @foreach (var item in Model)
+    {
+        <!-- Random image selection based on Id for placeholder variety -->
+        var randomImageId = (item.Id % 3) + 1;
+        var imageUrl = randomImageId == 1 ? "https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=600&auto=format&fit=crop" :
+                       randomImageId == 2 ? "https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?q=80&w=600&auto=format&fit=crop" : 
+                                            "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=600&auto=format&fit=crop";
+
+        <div class="apiario-card">
+            <div class="card-img-container">
+                <img src="@imageUrl" alt="Vista del apiario @item.Nombre" class="card-img" />
+                <div class="zona-badge">
+                    <i class="fa-solid fa-location-dot"></i> @(string.IsNullOrEmpty(item.Zona) ? "SIN ZONA" : item.Zona.ToUpper())
+                </div>
+            </div>
+            
+            <div class="apiario-card-body">
+                <div class="apiario-card-header d-flex justify-content-between align-items-start">
+                    <div>
+                        <h2 class="apiario-title" style="margin-bottom: 2px;">@item.Nombre</h2>
+                        <span class="apiario-id text-muted" style="font-size: 0.85rem; display: block;">ID: API-@item.Id.ToString("D4")</span>
+                        <div class="inspection-date mt-3 mb-4" style="font-size: 0.7rem; color: #7a6e62; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">
+                            ÚLTIMA INSPECCIÓN: @(item.Id % 2 == 0 ? "HOY" : "3D AGO")
+                        </div>
+                    </div>
+                    <div>
+                        @if (item.Id % 2 == 0)
+                        {
+                            <span class="status-badge status-healthy" style="background-color: #e6f6eb; color: #2e8b57;">SALUDABLE</span>
+                        }
+                        else if (item.Id % 3 == 0)
+                        {
+                            <span class="status-badge status-warning" style="background-color: #fcf1d7; color: #8c4b14;">EN OBSERVACIÓN</span>
+                        }
+                        else 
+                        {
+                            <span class="status-badge status-healthy" style="background-color: #e6f6eb; color: #2e8b57;">FUERTE</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="apiario-stats-row d-flex align-items-center mb-3">
+                    <div class="stat-col" style="flex: 1;">
+                        <span class="stat-number d-block" style="font-size: 1.4rem; font-weight: 700; color: #8c4b14;">@(12 + (item.Id * 3))</span>
+                        <span class="stat-label text-muted" style="font-size: 0.8rem;">Colmenas</span>
+                    </div>
+                    <div class="stat-vert-line" style="width: 1px; height: 35px; background-color: #e8e3dc; margin: 0 15px;"></div>
+                    <div class="stat-col" style="flex: 1;">
+                        <span class="stat-number d-block" style="font-size: 1.4rem; font-weight: 700; color: #5c4e40;">@(75 + (item.Id % 20))%</span>
+                        <span class="stat-label text-muted" style="font-size: 0.8rem;">Producción</span>
+                    </div>
+                    <div style="flex: 1;"></div> <!-- Spacer for 3 columns like original -->
+                </div>
+
+                <div class="apiario-icon-status mb-4 text-center" style="width: fit-content; text-align: left !important;">
+                    @if (item.Id % 2 == 0)
+                    {
+                        <i class="fa-solid fa-temperature-half" style="color: #d48e45; font-size: 1.2rem;"></i>
+                        <span class="d-block text-muted mt-1" style="font-size: 0.8rem;">24°C Avg</span>
+                    }
+                    else if (item.Id % 3 == 0)
+                    {
+                        <i class="fa-solid fa-bug" style="color: #d9534f; font-size: 1.2rem;"></i>
+                        <span class="d-block text-muted mt-1" style="font-size: 0.8rem;">Varroa detect.</span>
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-crown" style="color: #2e8b57; font-size: 1.2rem;"></i>
+                        <span class="d-block text-muted mt-1" style="font-size: 0.8rem;">Queen OK</span>
+                    }
+                </div>
+
+                <a asp-action="Details" asp-route-id="@item.Id" class="detail-link font-weight-bold d-inline-block" style="color: #8c4b14; text-decoration: none; font-weight: 700; font-size: 0.95rem;">
+                    Ver Detalle <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+                
+                <hr style="border-top: 1px solid #e8e3dc; margin: 1.5rem 0 1rem 0;" />
+
+                <div class="apiario-card-actions d-flex gap-4">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-icon" style="color: #7a6e62; font-size: 1.1rem; transition: color 0.2s;" onmouseover="this.style.color='#8c4b14'" onmouseout="this.style.color='#7a6e62'">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-icon" style="color: #d9534f; font-size: 1.1rem; transition: color 0.2s; margin-left: 15px;" onmouseover="this.style.color='#c9302c'" onmouseout="this.style.color='#d9534f'">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="bottom-action-bar">
+    <a asp-action="Create" class="btn-primary btn-wide">
+        <i class="fa-regular fa-map"></i> Nuevo Apiario
+    </a>
+</div>

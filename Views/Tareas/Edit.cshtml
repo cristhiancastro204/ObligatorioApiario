@@ -1,0 +1,114 @@
+@model ObligatorioApiario.Models.TareaViewModel
+
+@{
+    ViewData["Title"] = "Modificar Tarea";
+}
+
+<div class="breadcrumb-tareas">
+    <a href="#">Apiarios</a> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i> 
+    <a asp-action="Index" style="text-decoration:none;">Tareas</a> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i> 
+    <span class="active">Modificar Tarea</span>
+</div>
+
+<h2 class="page-title" style="margin-bottom: 2rem;">Modificar Tarea</h2>
+
+<div class="cards-layout">
+    <!-- Columna Izquierda: Formulario -->
+    <div class="form-white-card">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            
+            <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-bars-staggered"></i> Título de la Tarea</label>
+                <input type="text" name="Titulo" class="form-input" value="@Model.Titulo" placeholder="Ej: Inspección Sanitaria de Primavera" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-file-lines"></i> Descripción y Detalles</label>
+                <textarea name="Descripcion" class="form-input form-textarea" placeholder="Describe los pasos específicos a seguir..." required>@Model.Descripcion</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-location-dot"></i> Apiario</label>
+                    <select name="NombreApiario" class="form-input form-select" required>
+                        <option value="">Selecciona un apiario</option>
+                        @if(Model.NombreApiario == "Valle Dorado") { <option value="Valle Dorado" selected>Valle Dorado</option> } else { <option value="Valle Dorado">Valle Dorado</option> }
+                        @if(Model.NombreApiario == "Los Pinos") { <option value="Los Pinos" selected>Los Pinos</option> } else { <option value="Los Pinos">Los Pinos</option> }
+                        @if(Model.NombreApiario == "La Pradera") { <option value="La Pradera" selected>La Pradera</option> } else { <option value="La Pradera">La Pradera</option> }
+                        @if(Model.NombreApiario == "Serranía Sur") { <option value="Serranía Sur" selected>Serranía Sur</option> } else { <option value="Serranía Sur">Serranía Sur</option> }
+                    </select>
+                </div>
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha de Vencimiento</label>
+                    <input type="date" name="FechaVencimiento" class="form-input" value="@Model.FechaVencimiento.ToString("yyyy-MM-dd")" required />
+                </div>
+            </div>
+
+            <!-- El campo de Asignar no es parte del modelo actual, pero lo dejamos visualmente por diseño -->
+            <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-user-plus"></i> Asignar a (Opcional)</label>
+                <div class="input-with-suffix">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; color: #999;"></i>
+                    <input type="text" class="form-input" placeholder="Buscar apicultor..." style="padding-left: 45px;" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-exclamation"></i> Nivel de Prioridad</label>
+                <div class="priority-selector">
+                    <label class="priority-pill">
+                        @if(Model.NivelPrioridad == "Baja") { <input type="radio" name="NivelPrioridad" value="Baja" checked /> } else { <input type="radio" name="NivelPrioridad" value="Baja" /> }
+                        <div class="priority-dot baja"></div> Baja
+                    </label>
+                    <label class="priority-pill">
+                        @if(Model.NivelPrioridad == "Media") { <input type="radio" name="NivelPrioridad" value="Media" checked /> } else { <input type="radio" name="NivelPrioridad" value="Media" /> }
+                        <div class="priority-dot media"></div> Media
+                    </label>
+                    <label class="priority-pill">
+                        @if(Model.NivelPrioridad == "Alta") { <input type="radio" name="NivelPrioridad" value="Alta" checked /> } else { <input type="radio" name="NivelPrioridad" value="Alta" /> }
+                        <div class="priority-dot alta"></div> Alta
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-top: 3rem;">
+                <button type="submit" class="btn-primary col-half" style="border-radius: 8px;">Guardar Cambios</button>
+                <a asp-action="Index" class="btn-outline col-half" style="border-radius: 8px; color: #555; border-color: #555; text-decoration: none; display: flex; justify-content: center; align-items: center;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Columna Derecha: Widgets -->
+    <div class="widgets-sidebar">
+        <!-- Guía de Tareas -->
+        <div class="widget-card">
+            <h3><i class="fa-regular fa-circle-info"></i> Guía de Tareas</h3>
+            <p>Las tareas ayudan a mantener un registro preciso de las intervenciones en cada colmena. Priorizar adecuadamente garantiza la salud del apiario.</p>
+            <ul class="widget-list">
+                <li><i class="fa-regular fa-circle-check"></i> <span>Inspecciones de Varroa cada <strong>15 días.</strong></span></li>
+                <li><i class="fa-regular fa-circle-check"></i> <span>Control de reservas en <strong>invierno.</strong></span></li>
+                <li><i class="fa-regular fa-circle-check"></i> <span>Mantenimiento de alzas <strong>pre-cosecha.</strong></span></li>
+            </ul>
+        </div>
+
+        <!-- Condición Local -->
+        <div class="weather-card">
+            <div class="weather-header">Condición Local</div>
+            <div class="weather-temp">
+                <i class="fa-regular fa-sun"></i> 24°C
+            </div>
+            <p class="weather-desc">Perfecto para inspecciones de campo hoy.</p>
+        </div>
+
+        <!-- Manual de Salud -->
+        <div class="image-card">
+            <img src="https://images.unsplash.com/photo-1587049352847-81a56d773c1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Abejas en panal" />
+            <div class="image-card-body">
+                <h4>Manual de Salud</h4>
+                <p>Recursos para identificación de enfermedades.</p>
+                <a href="#" class="image-card-link">Leer más <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
