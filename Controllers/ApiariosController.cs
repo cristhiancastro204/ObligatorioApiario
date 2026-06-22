@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ObligatorioApiario.Data;
 using ObligatorioApiario.Models;
 
@@ -16,7 +17,7 @@ namespace ObligatorioApiario.Controllers
         // GET: Apiarios
         public IActionResult Index()
         {
-            var apiarios = _context.Apiarios.ToList();
+            var apiarios = _context.Apiarios.Include(a => a.Colmenas).ToList();
             return View(apiarios);
         }
 
@@ -28,7 +29,7 @@ namespace ObligatorioApiario.Controllers
                 return NotFound();
             }
 
-            var apiario = _context.Apiarios.FirstOrDefault(m => m.Id == id);
+            var apiario = _context.Apiarios.Include(a => a.Colmenas).FirstOrDefault(m => m.Id == id);
             if (apiario == null)
             {
                 return NotFound();

@@ -1,0 +1,35 @@
+@model ObligatorioApiario.Models.Colmena
+
+@{
+    ViewData["Title"] = "Eliminar Colmena";
+}
+
+<div style="max-width: 600px; margin: 0 auto; padding-top: 2rem; padding-bottom: 2rem;">
+    <div class="card" style="border-radius: 12px; border: 1px solid #fcedec; box-shadow: 0 4px 12px rgba(217, 83, 79, 0.1);">
+        <div class="card-header" style="background-color: #fcedec; color: #d9534f; padding: 20px; border-radius: 12px 12px 0 0; text-align: center; border-bottom: none;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <h2 style="margin: 0; font-weight: 800; font-size: 1.8rem;">¿Eliminar esta colmena?</h2>
+        </div>
+        <div class="card-body" style="padding: 30px; text-align: center; background-color: white; border-radius: 0 0 12px 12px;">
+            <p style="font-size: 1.1rem; color: #5c4e40; margin-bottom: 25px;">
+                Estás a punto de eliminar la colmena <strong>@Model.Identificador</strong>. Esta acción no se puede deshacer y todos los datos asociados se perderán permanentently.
+            </p>
+
+            <div style="background-color: #fdfbf7; border: 1px solid #e8e3dc; border-radius: 8px; padding: 15px; margin-bottom: 30px; text-align: left;">
+                <div style="margin-bottom: 10px;"><strong>Apiario:</strong> @Model.Apiario?.Nombre</div>
+                <div style="margin-bottom: 10px;"><strong>Estado:</strong> @Model.EstadoSalud</div>
+                <div><strong>Abejas (estimado):</strong> @Model.CantidadAbejas.ToString("N0")</div>
+            </div>
+
+            <form asp-action="Delete" method="post" style="display: flex; gap: 15px; justify-content: center;">
+                <input type="hidden" asp-for="Id" />
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-outline" style="border: 1.5px solid #e8e3dc; background: transparent; color: #7a6e62; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none;">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-danger" style="background-color: #d9534f; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                    <i class="fa-solid fa-trash" style="margin-right: 8px;"></i> Sí, Eliminar Colmena
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

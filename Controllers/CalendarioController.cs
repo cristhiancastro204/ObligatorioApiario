@@ -78,6 +78,7 @@ namespace ObligatorioApiario.Controllers
                     if (tarea.NivelPrioridad == "Alta") typeClass = "red";
                     
                     dayViewModel.Events.Add(new EventViewModel { 
+                        Id = tarea.Id,
                         Title = tarea.Titulo, 
                         Type = typeClass,
                         IconClass = tarea.NivelPrioridad == "Alta" ? "fa-solid fa-triangle-exclamation" : ""

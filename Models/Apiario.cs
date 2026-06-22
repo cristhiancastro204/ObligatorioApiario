@@ -19,5 +19,7 @@ namespace ObligatorioApiario.Models
         public double Latitud { get; set; }
 
         public double Longitud { get; set; }
+
+        public ICollection<Colmena> Colmenas { get; set; } = new List<Colmena>();
     }
 }

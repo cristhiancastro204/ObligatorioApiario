@@ -50,7 +50,7 @@
                 {
                     var eventClass = ev.Type == "red" ? "calendar-event event-red" : "calendar-event event-yellow";
                     
-                    <div class="@eventClass">
+                    <a asp-controller="Tareas" asp-action="Details" asp-route-id="@ev.Id" class="@eventClass" style="text-decoration: none; color: inherit; display: block;">
                         @if (!string.IsNullOrEmpty(ev.IconClass))
                         {
                             <i class="@ev.IconClass" style="font-size: 0.6rem;"></i> 
@@ -60,7 +60,7 @@
                         {
                             <div class="event-dot"></div>
                         }
-                    </div>
+                    </a>
                 }
             </div>
         }

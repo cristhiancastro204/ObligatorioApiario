@@ -11,7 +11,7 @@
     
     <div class="breadcrumb mb-2" style="font-size: 0.8rem; font-weight: 600; color: #7a6e62; letter-spacing: 0.5px;">
         <span>Apiarios</span> <i class="fa-solid fa-chevron-right mx-2" style="font-size: 0.6rem;"></i> 
-        <span style="color: #8c4b14; text-transform: uppercase;">Vista General</span>
+        <span style="color: #8c4b14; text-transform: uppercase;">Vista General de @Model.Nombre</span>
     </div>
 
     <div class="details-header d-flex justify-content-between align-items-center mb-4">
@@ -144,6 +144,75 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- SECCIÓN DE COLMENAS -->
+    <div class="colmenas-section mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: #2d261e; margin: 0;">
+                <i class="fa-solid fa-layer-group" style="color: #8c4b14; margin-right: 10px;"></i> Colmenas del Apiario
+            </h2>
+            <a asp-controller="Colmenas" asp-action="Create" asp-route-apiarioId="@Model.Id" class="btn-primary" style="background-color: #8c4b14; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; text-decoration: none;">
+                <i class="fa-solid fa-plus"></i> Nueva Colmena
+            </a>
+        </div>
+
+        @if (Model.Colmenas != null && Model.Colmenas.Any())
+        {
+            <div class="colmenas-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                @foreach (var colmena in Model.Colmenas)
+                {
+                    <div class="card colmena-card" style="border-radius: 12px; padding: 20px; border-top: 4px solid #fca074;">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h3 style="font-size: 1.2rem; font-weight: 800; color: #2d261e; margin: 0;">@colmena.Identificador</h3>
+                                <span style="font-size: 0.8rem; color: #7a6e62;">Instalada: @colmena.FechaInstalacion.ToString("MMM yyyy")</span>
+                            </div>
+                            <span class="badge" style="background-color: @(colmena.EstadoSalud == "Saludable" || colmena.EstadoSalud == "Fuerte" ? "#e6f6eb" : colmena.EstadoSalud == "En Observación" ? "#fcf1d7" : "#fcedec"); color: @(colmena.EstadoSalud == "Saludable" || colmena.EstadoSalud == "Fuerte" ? "#2e8b57" : colmena.EstadoSalud == "En Observación" ? "#8c4b14" : "#d9534f"); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">
+                                @colmena.EstadoSalud
+                            </span>
+                        </div>
+                        
+                        <div class="mb-4" style="display: flex; gap: 15px;">
+                            <div style="flex: 1; background: #f8f6f4; padding: 10px; border-radius: 8px; text-align: center;">
+                                <span style="display: block; font-size: 1.1rem; font-weight: 800; color: #8c4b14;">@colmena.CantidadMarcos</span>
+                                <span style="display: block; font-size: 0.7rem; color: #7a6e62; text-transform: uppercase;">Marcos</span>
+                            </div>
+                            <div style="flex: 1; background: #f8f6f4; padding: 10px; border-radius: 8px; text-align: center;">
+                                <span style="display: block; font-size: 1.1rem; font-weight: 800; color: #8c4b14;">@colmena.AnioReina</span>
+                                <span style="display: block; font-size: 0.7rem; color: #7a6e62; text-transform: uppercase;">Reina</span>
+                            </div>
+                            <div style="flex: 1; background: #f8f6f4; padding: 10px; border-radius: 8px; text-align: center;">
+                                <span style="display: block; font-size: 1.1rem; font-weight: 800; color: #8c4b14;">@colmena.CantidadAbejas.ToString("N0")</span>
+                                <span style="display: block; font-size: 0.7rem; color: #7a6e62; text-transform: uppercase;">Abejas</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <a asp-controller="Colmenas" asp-action="Details" asp-route-id="@colmena.Id" class="detail-link font-weight-bold d-inline-block" style="color: #8c4b14; text-decoration: none; font-weight: 700; font-size: 0.95rem;">
+                                Ver Detalle <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </a>
+                            <div class="d-flex gap-2">
+                                <a asp-controller="Colmenas" asp-action="Edit" asp-route-id="@colmena.Id" class="btn-outline" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 6px; text-decoration: none; border: 1px solid #d4c4b7; color: #7a6e62;">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state" style="text-align: center; padding: 40px 20px; background-color: #fdfbf7; border: 2px dashed #e8e3dc; border-radius: 12px;">
+                <i class="fa-solid fa-layer-group" style="font-size: 3rem; color: #d4c4b7; margin-bottom: 15px;"></i>
+                <h4 style="color: #5c4e40; font-weight: 700; margin-bottom: 10px;">Aún no hay colmenas registradas</h4>
+                <p style="color: #7a6e62; font-size: 0.9rem; margin-bottom: 20px;">Comienza agregando la primera colmena a este apiario para llevar su seguimiento.</p>
+                <a asp-controller="Colmenas" asp-action="Create" asp-route-apiarioId="@Model.Id" class="btn-primary" style="background-color: #8c4b14; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; text-decoration: none;">
+                    <i class="fa-solid fa-plus"></i> Registrar Colmena
+                </a>
+            </div>
+        }
     </div>
 </div>
 

@@ -53,13 +53,13 @@
 
                 <div class="apiario-stats-row d-flex align-items-center mb-3">
                     <div class="stat-col" style="flex: 1;">
-                        <span class="stat-number d-block" style="font-size: 1.4rem; font-weight: 700; color: #8c4b14;">@(12 + (item.Id * 3))</span>
+                        <span class="stat-number d-block" style="font-size: 1.4rem; font-weight: 700; color: #8c4b14;">@(item.Colmenas?.Count ?? 0)</span>
                         <span class="stat-label text-muted" style="font-size: 0.8rem;">Colmenas</span>
                     </div>
                     <div class="stat-vert-line" style="width: 1px; height: 35px; background-color: #e8e3dc; margin: 0 15px;"></div>
                     <div class="stat-col" style="flex: 1;">
-                        <span class="stat-number d-block" style="font-size: 1.4rem; font-weight: 700; color: #5c4e40;">@(75 + (item.Id % 20))%</span>
-                        <span class="stat-label text-muted" style="font-size: 0.8rem;">Producción</span>
+                        <span class="stat-number d-block" style="font-size: 1.4rem; font-weight: 700; color: #5c4e40;">0 kg</span>
+                        <span class="stat-label text-muted" style="font-size: 0.8rem;">Últ. Prod. de Miel</span>
                     </div>
                     <div style="flex: 1;"></div> <!-- Spacer for 3 columns like original -->
                 </div>
