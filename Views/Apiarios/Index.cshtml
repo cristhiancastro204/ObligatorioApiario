@@ -58,7 +58,13 @@
                     </div>
                     <div class="stat-vert-line" style="width: 1px; height: 35px; background-color: #e8e3dc; margin: 0 15px;"></div>
                     <div class="stat-col" style="flex: 1;">
-                        <span class="stat-number d-block" style="font-size: 1.4rem; font-weight: 700; color: #5c4e40;">0 kg</span>
+                        <span class="stat-number d-block" style="font-size: 1.4rem; font-weight: 700; color: #5c4e40;">
+                            @{
+                                var ultimaCosecha = item.Cosechas?.OrderByDescending(c => c.Fecha).FirstOrDefault();
+                                var kgUltimaCosecha = ultimaCosecha?.Detalles?.Sum(d => d.CantidadKg) ?? 0;
+                            }
+                            @kgUltimaCosecha.ToString("0.##") kg
+                        </span>
                         <span class="stat-label text-muted" style="font-size: 0.8rem;">Últ. Prod. de Miel</span>
                     </div>
                     <div style="flex: 1;"></div> <!-- Spacer for 3 columns like original -->

@@ -88,6 +88,9 @@ namespace ObligatorioApiario.Controllers
 
             var colmena = await _context.Colmenas
                 .Include(c => c.Apiario)
+                .Include(c => c.HistorialCosechas)
+                    .ThenInclude(hc => hc.Cosecha)
+                        .ThenInclude(c => c.Apiario)
                 .FirstOrDefaultAsync(m => m.Id == id);
                 
             if (colmena == null)

@@ -118,6 +118,55 @@
                 </div>
             </div>
 
+            <!-- Historial de Cosechas -->
+            <div class="card p-4" style="border-radius: 12px; background-color: white; border: 1px solid #e8e3dc; margin-top: 24px;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: #2d261e; margin: 0; display: flex; align-items: center;">
+                        <i class="fa-solid fa-clock-rotate-left" style="color: #8c4b14; margin-right: 10px;"></i> Historial de Producción
+                    </h3>
+                </div>
+                
+                <div class="table-responsive">
+                    @if (Model.HistorialCosechas == null || !Model.HistorialCosechas.Any())
+                    {
+                        <div style="text-align: center; color: #7a6e62; padding: 1.5rem 0;">
+                            <p style="font-size: 0.95rem; margin: 0;">Esta colmena no tiene producciones registradas.</p>
+                        </div>
+                    }
+                    else
+                    {
+                    <div class="historial-list" style="display: flex; flex-direction: column;">
+                        <!-- Encabezado -->
+                        <div class="d-flex justify-content-between" style="border-bottom: 2px solid #e8e3dc; padding-bottom: 10px; margin-bottom: 5px;">
+                            <div style="flex: 2; color: #7a6e62; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Fecha</div>
+                            <div style="flex: 3; color: #7a6e62; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Apiario</div>
+                            <div style="flex: 4; color: #7a6e62; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Notas Generales</div>
+                            <div style="flex: 2; color: #7a6e62; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; text-align: right;">Kilos</div>
+                        </div>
+
+                        <!-- Filas -->
+                        @foreach (var hc in Model.HistorialCosechas.OrderByDescending(h => h.Cosecha?.Fecha))
+                        {
+                            <div class="d-flex justify-content-between align-items-center" style="border-bottom: 1px solid #f8f6f4; padding: 14px 0;">
+                                <div style="flex: 2; font-weight: 600; color: #5c4e40; font-size: 0.95rem;">
+                                    @(hc.Cosecha?.Fecha.ToString("dd MMM yyyy"))
+                                </div>
+                                <div style="flex: 3; font-weight: 600; color: #d48e45; font-size: 0.95rem;">
+                                    <i class="fa-solid fa-map-pin" style="margin-right: 5px;"></i> @(hc.Cosecha?.Apiario?.Nombre ?? "Desconocido")
+                                </div>
+                                <div style="flex: 4; color: #7a6e62; font-size: 0.9rem;">
+                                    @(string.IsNullOrEmpty(hc.Cosecha?.Notas) ? "-" : hc.Cosecha?.Notas)
+                                </div>
+                                <div style="flex: 2; font-weight: 800; color: #8c4b14; text-align: right; font-size: 1.15rem;">
+                                    @hc.CantidadKg.ToString("0.##") <span style="font-size: 0.85rem; color: #7a6e62; font-weight: 600;">kg</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

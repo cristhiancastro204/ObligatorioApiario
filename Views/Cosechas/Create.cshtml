@@ -1,0 +1,88 @@
+@model ObligatorioApiario.Models.CosechaCreateViewModel
+
+@{
+    ViewData["Title"] = "Registrar Cosecha";
+}
+
+<div class="form-page-container" style="max-width: 800px; margin: 0 auto; padding-bottom: 2rem;">
+    <div class="breadcrumb mb-2" style="font-size: 0.8rem; font-weight: 600; color: #7a6e62;">
+        <span>Apiarios</span> <i class="fa-solid fa-chevron-right mx-2" style="font-size: 0.6rem;"></i> 
+        <a asp-controller="Apiarios" asp-action="Details" asp-route-id="@Model.ApiarioId" style="color: #7a6e62; text-decoration: none;">@Model.ApiarioNombre</a> <i class="fa-solid fa-chevron-right mx-2" style="font-size: 0.6rem;"></i> 
+        <span style="color: #8c4b14;">NUEVA COSECHA</span>
+    </div>
+
+    <div class="form-header text-center mb-4">
+        <div style="background-color: #fdf3e8; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
+            <i class="fa-solid fa-jar" style="color: #d48e45; font-size: 1.8rem;"></i>
+        </div>
+        <h1 class="page-title" style="margin: 0; font-size: 2rem; font-weight: 800; color: #8c4b14;">Registrar Cosecha</h1>
+        <p class="text-muted mt-2" style="font-size: 0.95rem;">Ingresa los kilos de miel obtenidos por cada colmena en este apiario.</p>
+    </div>
+
+    <div class="card form-card p-4" style="border-radius: 12px; border: 1px solid #e8e3dc; background: white;">
+        <form asp-action="Create" method="post">
+            <input type="hidden" asp-for="ApiarioId" />
+            <input type="hidden" asp-for="ApiarioNombre" />
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Fecha" class="form-label font-weight-bold" style="color: #5c4e40;"></label>
+                        <input asp-for="Fecha" class="form-control" style="border-radius: 8px; border: 1.5px solid #d4c4b7;" />
+                        <span asp-validation-for="Fecha" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label asp-for="Notas" class="form-label font-weight-bold" style="color: #5c4e40;"></label>
+                        <input asp-for="Notas" class="form-control" placeholder="Ej: Cosecha de primavera, floración de eucalipto..." style="border-radius: 8px; border: 1.5px solid #d4c4b7;" />
+                        <span asp-validation-for="Notas" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border-top: 1px solid #e8e3dc; margin: 2rem 0;" />
+            <h4 style="font-weight: 700; color: #8c4b14; margin-bottom: 20px;"><i class="fa-solid fa-list-ol mr-2"></i> Detalle por Colmena</h4>
+
+            @if (!Model.ColmenasInput.Any())
+            {
+                <div class="alert alert-warning text-center" style="border-radius: 8px;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Este apiario no tiene colmenas registradas aún.
+                </div>
+            }
+            else
+            {
+                <div class="colmenas-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+                    @for (int i = 0; i < Model.ColmenasInput.Count; i++)
+                    {
+                        <div class="colmena-input-card d-flex justify-content-between align-items-center p-3" style="background-color: #f8f6f4; border: 1px solid #e8e3dc; border-radius: 8px;">
+                            <input type="hidden" asp-for="ColmenasInput[i].ColmenaId" />
+                            <input type="hidden" asp-for="ColmenasInput[i].Identificador" />
+                            
+                            <div style="font-weight: 700; color: #2d261e; font-size: 1.1rem; display: flex; align-items: center;">
+                                <i class="fa-solid fa-archive" style="color: #d48e45; margin-right: 15px; font-size: 1.3rem;"></i>
+                                @Model.ColmenasInput[i].Identificador
+                            </div>
+                            
+                            <div class="input-group" style="width: 150px;">
+                                <input asp-for="ColmenasInput[i].CantidadKg" type="number" step="0.1" min="0" class="form-control text-right font-weight-bold" style="border-radius: 6px 0 0 6px; border: 1.5px solid #d4c4b7; background-color: white !important; color: #2d261e !important; height: 42px; font-size: 1.1rem;" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="background-color: #fdf3e8; color: #8c4b14; font-weight: 600; border: 1.5px solid #d4c4b7; border-left: none; border-radius: 0 6px 6px 0; height: 42px; font-size: 1rem;">kg</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="form-actions d-flex justify-content-end gap-3 mt-4 pt-3" style="border-top: 1px solid #e8e3dc;">
+                <a asp-controller="Apiarios" asp-action="Details" asp-route-id="@Model.ApiarioId" class="btn-secondary" style="border-radius: 8px; padding: 10px 24px; text-decoration: none; color: #5c4e40; background-color: #f8f6f4; border: 1px solid #d4c4b7; font-weight: 600;">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-primary" style="border-radius: 8px; padding: 10px 24px; background-color: #8c4b14; border: none; font-weight: 600; color: white;">
+                    <i class="fa-solid fa-check"></i> Guardar Cosecha
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

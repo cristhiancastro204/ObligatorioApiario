@@ -20,6 +20,8 @@ namespace ObligatorioApiario.Models
         [Display(Name = "Cantidad de Abejas Estimada")]
         public int CantidadAbejas { get; set; } = 50000;
 
+        public ICollection<CosechaColmena> HistorialCosechas { get; set; } = new List<CosechaColmena>();
+
         [Display(Name = "Tipo de Abeja")]
         public string TipoAbeja { get; set; } = string.Empty;
 

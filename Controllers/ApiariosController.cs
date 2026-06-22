@@ -14,10 +14,13 @@ namespace ObligatorioApiario.Controllers
             _context = context;
         }
 
-        // GET: Apiarios
         public IActionResult Index()
         {
-            var apiarios = _context.Apiarios.Include(a => a.Colmenas).ToList();
+            var apiarios = _context.Apiarios
+                .Include(a => a.Colmenas)
+                .Include(a => a.Cosechas)
+                .ThenInclude(c => c.Detalles)
+                .ToList();
             return View(apiarios);
         }
 

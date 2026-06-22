@@ -20,6 +20,9 @@ namespace ObligatorioApiario.Models
 
         public double Longitud { get; set; }
 
+        // Relación 1 a muchos: Un apiario puede tener varias tareas, colmenas y cosechas
+        public ICollection<Tarea> Tareas { get; set; } = new List<Tarea>();
         public ICollection<Colmena> Colmenas { get; set; } = new List<Colmena>();
+        public ICollection<Cosecha> Cosechas { get; set; } = new List<Cosecha>();
     }
 }
