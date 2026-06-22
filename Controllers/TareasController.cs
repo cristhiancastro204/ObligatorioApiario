@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ObligatorioApiario.Data;
 using ObligatorioApiario.Models;
 
@@ -25,47 +26,71 @@ namespace ObligatorioApiario.Controllers
             return View(); // Retorna la vista asociada (Views/Tareas/Create.cshtml)
         }
 
-        // Acción POST: Recibe los datos del formulario para procesar y guardar la nueva tarea.
-        // Se ejecuta cuando el usuario envía el formulario.
+        // Acción POST: Recibe los datos del formulario para procesar y guardar las nuevas tareas por colmena.
         [HttpPost]
-        public IActionResult Create(TareaViewModel tareaVM)
+        public IActionResult Create(CreateTareasViewModel model)
         {
-            // Mapea los datos recibidos de la vista (ViewModel) al modelo de dominio (Tarea)
-            var tarea = new Tarea
+            if (model.TareasColmenas == null || !model.TareasColmenas.Any(tc => !string.IsNullOrWhiteSpace(tc.Titulo)))
             {
-                Titulo = tareaVM.Titulo,
-                Descripcion = tareaVM.Descripcion,
-                NombreApiario = tareaVM.NombreApiario,
-                // Si la fecha por defecto viene vacía, le asigna la fecha actual, sino usa la proporcionada.
-                FechaVencimiento = tareaVM.FechaVencimiento == default ? DateTime.Now : tareaVM.FechaVencimiento,
-                // Si la prioridad viene nula o vacía, le asigna "Baja" por defecto.
-                NivelPrioridad = string.IsNullOrEmpty(tareaVM.NivelPrioridad) ? "Baja" : tareaVM.NivelPrioridad,
-                // Define un ícono fijo por defecto para la tarea.
-                Icono = "fa-solid fa-circle-check",
-                Estado = string.IsNullOrEmpty(tareaVM.Estado) ? "Programada" : tareaVM.Estado,
-                HerramientasRequeridas = tareaVM.HerramientasRequeridas ?? "",
-                NotasCampo = tareaVM.NotasCampo ?? "",
-                CreadoPor = string.IsNullOrEmpty(tareaVM.CreadoPor) ? "Admin (Sistema)" : tareaVM.CreadoPor,
-                ClimaEstado = string.IsNullOrEmpty(tareaVM.ClimaEstado) ? "Soleado" : tareaVM.ClimaEstado,
-                ClimaTemperatura = string.IsNullOrEmpty(tareaVM.ClimaTemperatura) ? "22ºC" : tareaVM.ClimaTemperatura,
-                ColmenasRiesgo = string.IsNullOrEmpty(tareaVM.ColmenasRiesgo) ? "0/0" : tareaVM.ColmenasRiesgo,
-                FechaActualizacion = DateTime.Now
-            };
+                // Si no se ingresó ninguna tarea, volvemos a la vista (se podría agregar un mensaje de error)
+                ViewBag.Apiarios = _context.Apiarios.ToList();
+                return View();
+            }
 
-            // Agrega la nueva tarea al contexto y guarda los cambios en la base de datos.
-            _context.Tareas.Add(tarea);
+            foreach (var tc in model.TareasColmenas)
+            {
+                if (!string.IsNullOrWhiteSpace(tc.Titulo))
+                {
+                    var tarea = new Tarea
+                    {
+                        Titulo = tc.Titulo,
+                        Descripcion = tc.Descripcion,
+                        NombreApiario = model.NombreApiario,
+                        FechaVencimiento = model.FechaVencimiento == default ? DateTime.Now : model.FechaVencimiento,
+                        NivelPrioridad = string.IsNullOrEmpty(tc.NivelPrioridad) ? "Baja" : tc.NivelPrioridad,
+                        Icono = "fa-solid fa-circle-check",
+                        Estado = string.IsNullOrEmpty(model.Estado) ? "Programada" : model.Estado,
+                        HerramientasRequeridas = model.HerramientasRequeridas ?? "",
+                        NotasCampo = tc.NotasCampo ?? "",
+                        CreadoPor = "Admin (Sistema)",
+                        ClimaEstado = string.IsNullOrEmpty(model.ClimaEstado) ? "Soleado" : model.ClimaEstado,
+                        ClimaTemperatura = string.IsNullOrEmpty(model.ClimaTemperatura) ? "22ºC" : model.ClimaTemperatura,
+                        ColmenasRiesgo = string.IsNullOrEmpty(model.ColmenasRiesgo) ? "0/0" : model.ColmenasRiesgo,
+                        FechaActualizacion = DateTime.Now,
+                        ColmenaId = tc.ColmenaId
+                    };
+                    _context.Tareas.Add(tarea);
+                }
+            }
+
             _context.SaveChanges();
             
-            // Redirige al usuario a la lista de tareas (acción Index) una vez guardada.
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult GetColmenasPorApiario(string nombreApiario)
+        {
+            var apiario = _context.Apiarios
+                .Include(a => a.Colmenas)
+                .FirstOrDefault(a => a.Nombre == nombreApiario);
+
+            if (apiario == null) return Json(new List<object>());
+
+            var colmenas = apiario.Colmenas.Select(c => new {
+                id = c.Id,
+                identificador = c.Identificador
+            }).ToList();
+
+            return Json(colmenas);
         }
         
         // Acción GET: Muestra la lista de tareas. 
         // Permite recibir un parámetro 'ordenarPor' para decidir cómo listar los datos (por defecto ordena por "prioridad").
         public IActionResult Index(string ordenarPor = "prioridad")
         {
-            // Obtiene todas las tareas de la base de datos.
-            var tareasDb = _context.Tareas.ToList();
+            // Obtiene todas las tareas de la base de datos, incluyendo la información de la Colmena asociada.
+            var tareasDb = _context.Tareas.Include(t => t.Colmena).ToList();
 
             // Mapea la lista de modelos de dominio (Tarea) a una lista de modelos de vista (TareaViewModel)
             // para enviar solo la información necesaria a la interfaz.
@@ -85,7 +110,8 @@ namespace ObligatorioApiario.Controllers
                 ClimaEstado = t.ClimaEstado,
                 ClimaTemperatura = t.ClimaTemperatura,
                 ColmenasRiesgo = t.ColmenasRiesgo,
-                FechaActualizacion = t.FechaActualizacion
+                FechaActualizacion = t.FechaActualizacion,
+                IdentificadorColmena = t.Colmena?.Identificador
             }).ToList();
 
             // Lógica de ordenamiento según la preferencia del usuario

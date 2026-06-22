@@ -28,52 +28,61 @@
     </div>
 </div>
 
-<div class="task-grid">
-    @foreach (var tarea in Model)
-    {
-        var badgeClass = tarea.NivelPrioridad.ToLower() == "alta" ? "badge-alta" : tarea.NivelPrioridad.ToLower() == "media" ? "badge-media" : "badge-baja";
+@foreach(var group in Model.GroupBy(t => t.NombreApiario))
+{
+    <div class="apiario-section" style="margin-bottom: 3rem;">
+        <h2 style="color: #d48e45; border-bottom: 2px solid #e8e3dc; padding-bottom: 0.5rem; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">
+            <i class="fa-solid fa-map-pin" style="margin-right: 10px;"></i> Apiario: @(string.IsNullOrEmpty(group.Key) ? "Generales / Sin Apiario" : group.Key)
+        </h2>
         
-        <div class="task-card">
-            <div style="display: flex; flex-direction: column; flex-grow: 1;">
-                <div class="task-card-header">
-                    <div class="task-icon">
-                        <i class="@tarea.Icono"></i>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
-                        <span class="task-badge @badgeClass">@tarea.NivelPrioridad</span>
-                        <span class="status-badge-mini status-@tarea.Estado.ToLower().Replace(" ", "")" style="font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 8px;">@tarea.Estado</span>
-                    </div>
-                </div>
-                <h3 class="task-card-title">@tarea.Titulo</h3>
-                <p class="task-card-desc">@tarea.Descripcion</p>
+        <div class="task-grid">
+            @foreach (var tarea in group)
+            {
+                var badgeClass = tarea.NivelPrioridad.ToLower() == "alta" ? "badge-alta" : tarea.NivelPrioridad.ToLower() == "media" ? "badge-media" : "badge-baja";
                 
-                <div class="task-card-footer" style="margin-bottom: 1.5rem;">
-                    <div class="task-meta">
-                        <i class="fa-regular fa-calendar"></i> Fecha: <strong>@tarea.FechaVencimiento.ToString("dd MMM, yyyy", new System.Globalization.CultureInfo("es-ES"))</strong>
+                <div class="task-card">
+                    <div style="display: flex; flex-direction: column; flex-grow: 1;">
+                        <div class="task-card-header">
+                            <div class="task-icon">
+                                <i class="@tarea.Icono"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                                <span class="task-badge @badgeClass">@tarea.NivelPrioridad</span>
+                                <span class="status-badge-mini status-@tarea.Estado.ToLower().Replace(" ", "")" style="font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 8px;">@tarea.Estado</span>
+                            </div>
+                        </div>
+                        <h3 class="task-card-title">@tarea.Titulo</h3>
+                        <p class="task-card-desc">@tarea.Descripcion</p>
+                        
+                        <div class="task-card-footer" style="margin-bottom: 1.5rem;">
+                            <div class="task-meta">
+                                <i class="fa-regular fa-calendar"></i> Fecha: <strong>@tarea.FechaVencimiento.ToString("dd MMM, yyyy", new System.Globalization.CultureInfo("es-ES"))</strong>
+                            </div>
+                            <div class="task-meta">
+                                <i class="fa-solid fa-box"></i> Colmena: <strong>@(string.IsNullOrEmpty(tarea.IdentificadorColmena) ? "No especificada" : tarea.IdentificadorColmena)</strong>
+                            </div>
+                        </div>
+
+                        <a asp-action="Details" asp-route-id="@tarea.Id" class="detail-link font-weight-bold d-inline-block mt-auto" style="color: #8c4b14; text-decoration: none; font-weight: 700; font-size: 0.95rem;">
+                            Ver Detalle <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
-                    <div class="task-meta">
-                        <i class="fa-solid fa-location-dot"></i> Apiario: <strong>@tarea.NombreApiario</strong>
+
+                    <hr style="border-top: 1px solid #e8e3dc; margin: 1.5rem 0 1rem 0;" />
+
+                    <div class="apiario-card-actions d-flex gap-4">
+                        <a asp-action="Edit" asp-route-id="@tarea.Id" class="action-icon" style="color: #7a6e62; font-size: 1.1rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#8c4b14'" onmouseout="this.style.color='#7a6e62'">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@tarea.Id" class="action-icon" style="color: #d9534f; font-size: 1.1rem; text-decoration: none; transition: color 0.2s; margin-left: 15px;" onmouseover="this.style.color='#c9302c'" onmouseout="this.style.color='#d9534f'">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </a>
                     </div>
                 </div>
-
-                <a asp-action="Details" asp-route-id="@tarea.Id" class="detail-link font-weight-bold d-inline-block mt-auto" style="color: #8c4b14; text-decoration: none; font-weight: 700; font-size: 0.95rem;">
-                    Ver Detalle <i class="fa-solid fa-arrow-right ml-1"></i>
-                </a>
-            </div>
-
-            <hr style="border-top: 1px solid #e8e3dc; margin: 1.5rem 0 1rem 0;" />
-
-            <div class="apiario-card-actions d-flex gap-4">
-                <a asp-action="Edit" asp-route-id="@tarea.Id" class="action-icon" style="color: #7a6e62; font-size: 1.1rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#8c4b14'" onmouseout="this.style.color='#7a6e62'">
-                    <i class="fa-solid fa-pen"></i>
-                </a>
-                <a asp-action="Delete" asp-route-id="@tarea.Id" class="action-icon" style="color: #d9534f; font-size: 1.1rem; text-decoration: none; transition: color 0.2s; margin-left: 15px;" onmouseover="this.style.color='#c9302c'" onmouseout="this.style.color='#d9534f'">
-                    <i class="fa-regular fa-trash-can"></i>
-                </a>
-            </div>
+            }
         </div>
-    }
-</div>
+    </div>
+}
 
 <div class="bottom-action-bar" style="margin-top: 3rem;">
     <a asp-action="Create" class="btn-primary btn-wide" style="display: inline-block; padding: 12px 30px; font-weight: 700; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; max-width: 300px; margin: 0 auto; box-sizing: border-box;">

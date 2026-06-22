@@ -17,5 +17,6 @@ namespace ObligatorioApiario.Models
         public string ClimaTemperatura { get; set; } = "22ºC";
         public string ColmenasRiesgo { get; set; } = "0/0";
         public DateTime FechaActualizacion { get; set; } = DateTime.Now;
+        public string? IdentificadorColmena { get; set; }
     }
 }

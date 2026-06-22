@@ -1,3 +1,4 @@
+@model ObligatorioApiario.Models.CreateTareasViewModel
 @{
     ViewData["Title"] = "Nueva Tarea";
 }
@@ -13,22 +14,14 @@
 <div class="cards-layout">
     <!-- Columna Izquierda: Formulario -->
     <div class="form-white-card">
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" id="create-tareas-form">
             
-            <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-bars-staggered"></i> Título de la Tarea</label>
-                <input type="text" name="Titulo" class="form-input" placeholder="Ej: Inspección Sanitaria de Primavera" required />
-            </div>
-
-            <div class="form-group">
-                <label class="form-label"><i class="fa-regular fa-file-lines"></i> Descripción y Detalles</label>
-                <textarea name="Descripcion" class="form-input form-textarea" placeholder="Describe los pasos específicos a seguir..." required></textarea>
-            </div>
+            <h3 style="margin-bottom: 1.5rem; color: #5c4e40; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Datos Generales</h3>
 
             <div class="form-row">
                 <div class="col-half form-group">
                     <label class="form-label"><i class="fa-solid fa-location-dot"></i> Apiario</label>
-                    <select name="NombreApiario" class="form-input form-select" required>
+                    <select name="NombreApiario" id="NombreApiario" class="form-input form-select" required>
                         <option value="">Selecciona un apiario</option>
                         @if (ViewBag.Apiarios != null)
                         {
@@ -41,37 +34,18 @@
                 </div>
                 <div class="col-half form-group">
                     <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha Programada</label>
-                    <input type="date" name="FechaVencimiento" class="form-input" required />
+                    <input type="date" name="FechaVencimiento" class="form-input" required value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-circle-info"></i> Estado</label>
-                    <select name="Estado" class="form-input form-select" required>
-                        <option value="Programada" selected>Programada</option>
-                        <option value="En Progreso">En Progreso</option>
-                        <option value="Completada">Completada</option>
-                        <option value="Cancelada">Cancelada</option>
-                    </select>
-                </div>
-                <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-exclamation"></i> Nivel de Prioridad</label>
-                    <div class="priority-selector" style="margin-bottom: 0;">
-                        <label class="priority-pill">
-                            <input type="radio" name="NivelPrioridad" value="Baja" />
-                            <div class="priority-dot baja"></div> Baja
-                        </label>
-                        <label class="priority-pill">
-                            <input type="radio" name="NivelPrioridad" value="Media" checked />
-                            <div class="priority-dot media"></div> Media
-                        </label>
-                        <label class="priority-pill">
-                            <input type="radio" name="NivelPrioridad" value="Alta" />
-                            <div class="priority-dot alta"></div> Alta
-                        </label>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-circle-info"></i> Estado</label>
+                <select name="Estado" class="form-input form-select" required>
+                    <option value="Programada" selected>Programada</option>
+                    <option value="En Progreso">En Progreso</option>
+                    <option value="Completada">Completada</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -101,13 +75,20 @@
                 <input type="text" name="ColmenasRiesgo" class="form-input" placeholder="Ej: 2/16" value="0/0" required />
             </div>
 
-            <div class="form-group">
-                <label class="form-label"><i class="fa-regular fa-clipboard"></i> Notas de Campo (Opcional)</label>
-                <textarea name="NotasCampo" class="form-input form-textarea" placeholder="Observaciones adicionales del campo..."></textarea>
+            <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #5c4e40; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Tareas por Colmena</h3>
+            <p style="font-size: 0.85rem; color: #7a6e62; margin-bottom: 1.5rem;">
+                Selecciona un apiario arriba para ver sus colmenas. Las colmenas que dejes con el título en blanco no crearán una tarea.
+            </p>
+
+            <div id="colmenas-container">
+                <div style="text-align: center; padding: 2rem; color: #999;">
+                    <i class="fa-solid fa-arrow-up" style="font-size: 2rem; margin-bottom: 1rem; color: #ddd;"></i>
+                    <p>Por favor, selecciona un apiario para asignar tareas.</p>
+                </div>
             </div>
 
             <div class="form-row" style="margin-top: 3rem;">
-                <button type="submit" class="btn-primary col-half" style="border-radius: 8px;">Crear Tarea</button>
+                <button type="button" onclick="submitForm()" class="btn-primary col-half" style="border-radius: 8px;">Crear Tareas</button>
                 <a asp-action="Index" class="btn-outline col-half" style="border-radius: 8px; color: #555; border-color: #555; text-decoration: none; display: flex; justify-content: center; align-items: center;">Cancelar</a>
             </div>
         </form>
@@ -136,3 +117,99 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var selectApiario = document.getElementById('NombreApiario');
+            var colmenasContainer = document.getElementById('colmenas-container');
+
+            selectApiario.addEventListener('change', function() {
+                var nombreApiario = this.value;
+                if (!nombreApiario) {
+                    colmenasContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: #999;"><i class="fa-solid fa-arrow-up" style="font-size: 2rem; margin-bottom: 1rem; color: #ddd;"></i><p>Por favor, selecciona un apiario para asignar tareas.</p></div>';
+                    return;
+                }
+
+                colmenasContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: #999;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem;"></i><p>Cargando colmenas...</p></div>';
+
+                fetch('/Tareas/GetColmenasPorApiario?nombreApiario=' + encodeURIComponent(nombreApiario))
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            colmenasContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: #d9534f;"><i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; margin-bottom: 1rem;"></i><p>Este apiario no tiene colmenas registradas.</p></div>';
+                            return;
+                        }
+
+                        var html = '';
+                        data.forEach((colmena, index) => {
+                            html += `
+                            <div class="colmena-task-card" style="background: #fdfdfd; border: 1px solid #e8e3dc; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <h4 style="margin: 0; color: #d48e45;"><i class="fa-solid fa-box" style="margin-right: 5px;"></i> Colmena: ${colmena.identificador}</h4>
+                                </div>
+                                
+                                <input type="hidden" name="TareasColmenas[${index}].ColmenaId" value="${colmena.id}" />
+                                <input type="hidden" name="TareasColmenas[${index}].IdentificadorColmena" value="${colmena.identificador}" />
+                                
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size: 0.85rem;">Título de la Tarea</label>
+                                    <input type="text" name="TareasColmenas[${index}].Titulo" class="form-input" placeholder="Ej: Inspección Sanitaria..." />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size: 0.85rem;">Descripción y Detalles</label>
+                                    <textarea name="TareasColmenas[${index}].Descripcion" class="form-input form-textarea" placeholder="Pasos específicos..."></textarea>
+                                </div>
+
+                                <div class="form-row" style="margin-bottom: 0;">
+                                    <div class="col-half form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.85rem;">Notas de Campo</label>
+                                        <input type="text" name="TareasColmenas[${index}].NotasCampo" class="form-input" placeholder="Opcional" />
+                                    </div>
+                                    <div class="col-half form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.85rem;">Nivel de Prioridad</label>
+                                        <div class="priority-selector" style="margin-bottom: 0; padding: 0;">
+                                            <label class="priority-pill" style="padding: 4px 8px; font-size: 0.8rem;">
+                                                <input type="radio" name="TareasColmenas[${index}].NivelPrioridad" value="Baja" />
+                                                <div class="priority-dot baja"></div> Baja
+                                            </label>
+                                            <label class="priority-pill" style="padding: 4px 8px; font-size: 0.8rem;">
+                                                <input type="radio" name="TareasColmenas[${index}].NivelPrioridad" value="Media" checked />
+                                                <div class="priority-dot media"></div> Media
+                                            </label>
+                                            <label class="priority-pill" style="padding: 4px 8px; font-size: 0.8rem;">
+                                                <input type="radio" name="TareasColmenas[${index}].NivelPrioridad" value="Alta" />
+                                                <div class="priority-dot alta"></div> Alta
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+                        colmenasContainer.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching colmenas:', error);
+                        colmenasContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: #d9534f;"><p>Error al cargar colmenas.</p></div>';
+                    });
+            });
+        });
+
+        function submitForm() {
+            var form = document.getElementById('create-tareas-form');
+            if (form.checkValidity()) {
+                var inputs = document.querySelectorAll('input[name^="TareasColmenas"][name$=".Titulo"]');
+                var hasTasks = Array.from(inputs).some(input => input.value.trim() !== '');
+                
+                if (!hasTasks) {
+                    alert('Debes ingresar un título para al menos una colmena.');
+                    return;
+                }
+                form.submit();
+            } else {
+                form.reportValidity();
+            }
+        }
+    </script>
+}

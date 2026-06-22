@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ObligatorioApiario.Models
 {
@@ -38,5 +39,10 @@ namespace ObligatorioApiario.Models
         public string ColmenasRiesgo { get; set; } = "0/0";
 
         public DateTime FechaActualizacion { get; set; } = DateTime.Now;
+
+        public int? ColmenaId { get; set; }
+
+        [ForeignKey("ColmenaId")]
+        public Colmena? Colmena { get; set; }
     }
 }
