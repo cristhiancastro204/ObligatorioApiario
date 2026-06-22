@@ -34,23 +34,28 @@
         var badgeClass = tarea.NivelPrioridad.ToLower() == "alta" ? "badge-alta" : tarea.NivelPrioridad.ToLower() == "media" ? "badge-media" : "badge-baja";
         
         <div class="task-card">
-            <div class="task-card-header">
-                <div class="task-icon">
-                    <i class="@tarea.Icono"></i>
+            <a asp-action="Details" asp-route-id="@tarea.Id" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; flex-grow: 1;">
+                <div class="task-card-header">
+                    <div class="task-icon">
+                        <i class="@tarea.Icono"></i>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                        <span class="task-badge @badgeClass">@tarea.NivelPrioridad</span>
+                        <span class="status-badge-mini status-@tarea.Estado.ToLower().Replace(" ", "")" style="font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 8px;">@tarea.Estado</span>
+                    </div>
                 </div>
-                <div class="task-badge @badgeClass">@tarea.NivelPrioridad</div>
-            </div>
-            <h3 class="task-card-title">@tarea.Titulo</h3>
-            <p class="task-card-desc">@tarea.Descripcion</p>
-            
-            <div class="task-card-footer">
-                <div class="task-meta">
-                    <i class="fa-regular fa-calendar"></i> Fecha: <strong>@tarea.FechaVencimiento.ToString("dd MMM, yyyy", new System.Globalization.CultureInfo("es-ES"))</strong>
+                <h3 class="task-card-title">@tarea.Titulo</h3>
+                <p class="task-card-desc">@tarea.Descripcion</p>
+                
+                <div class="task-card-footer">
+                    <div class="task-meta">
+                        <i class="fa-regular fa-calendar"></i> Fecha: <strong>@tarea.FechaVencimiento.ToString("dd MMM, yyyy", new System.Globalization.CultureInfo("es-ES"))</strong>
+                    </div>
+                    <div class="task-meta">
+                        <i class="fa-solid fa-location-dot"></i> Apiario: <strong>@tarea.NombreApiario</strong>
+                    </div>
                 </div>
-                <div class="task-meta">
-                    <i class="fa-solid fa-location-dot"></i> Apiario: <strong>@tarea.NombreApiario</strong>
-                </div>
-            </div>
+            </a>
 
             <hr style="border-top: 1px solid #e8e3dc; margin: 1.5rem 0 1rem 0;" />
 

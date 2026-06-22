@@ -1,0 +1,207 @@
+@model ObligatorioApiario.Models.TareaViewModel
+
+@{
+    ViewData["Title"] = "Detalles de Tarea";
+
+    // Separar herramientas por comas
+    var toolsList = new List<string>();
+    if (!string.IsNullOrEmpty(Model.HerramientasRequeridas))
+    {
+        toolsList = Model.HerramientasRequeridas
+            .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(t => t.Trim())
+            .Where(t => !string.IsNullOrEmpty(t))
+            .ToList();
+    }
+
+    // Identificar clase de prioridad
+    string priorityClass = Model.NivelPrioridad.ToLower() == "alta" ? "priority-alta" : Model.NivelPrioridad.ToLower() == "media" ? "priority-media" : "priority-baja";
+    string priorityIcon = Model.NivelPrioridad.ToLower() == "alta" ? "fa-solid fa-triangle-exclamation" : Model.NivelPrioridad.ToLower() == "media" ? "fa-solid fa-circle-exclamation" : "fa-solid fa-circle-info";
+
+    // Obtener clase de estado
+    string statusClass = "status-" + Model.Estado.ToLower().Replace(" ", "");
+}
+
+<div class="details-page-container">
+    <!-- Enlace de regreso -->
+    <div class="back-link-wrapper">
+        <a asp-action="Index" class="details-back-link">
+            <i class="fa-solid fa-arrow-left"></i> Volver a Listado de Tareas
+        </a>
+    </div>
+
+    <!-- Tarjeta Principal de Detalles -->
+    <div class="task-details-card">
+        <!-- Encabezado de la Tarjeta (Icono e ID) -->
+        <div class="details-card-header">
+            <div class="task-id-badge">
+                <div class="task-id-icon-box">
+                    <i class="fa-regular fa-square-check"></i>
+                </div>
+                <span class="task-id-text">ID TAREA: ZG-@Model.FechaVencimiento.Year-@Model.Id.ToString("D3")</span>
+            </div>
+        </div>
+
+        <!-- Título de la Tarea -->
+        <h1 class="details-task-title">@Model.Titulo</h1>
+
+        <!-- Badges de Estado y Prioridad -->
+        <div class="details-badges-row">
+            <span class="details-status-badge @statusClass">
+                <span class="status-dot"></span> @Model.Estado
+            </span>
+            <span class="details-priority-badge @priorityClass">
+                <i class="@priorityIcon"></i> @Model.NivelPrioridad
+            </span>
+        </div>
+
+        <!-- Grilla de Atributos -->
+        <div class="details-attributes-grid">
+            <!-- Item: Apiario Asociado -->
+            <div class="grid-item">
+                <div class="item-label">Apiario Asociado</div>
+                <div class="item-content">
+                    <div class="item-icon-box">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div class="item-text-wrapper">
+                        <div class="item-title">@Model.NombreApiario</div>
+                        <div class="item-subtitle">Ubicación General</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item: Fecha Programada -->
+            <div class="grid-item">
+                <div class="item-label">Fecha Programada</div>
+                <div class="item-content">
+                    <div class="item-icon-box">
+                        <i class="fa-regular fa-calendar-days"></i>
+                    </div>
+                    <div class="item-text-wrapper">
+                        <div class="item-title">@Model.FechaVencimiento.ToString("dd 'de' MMMM, yyyy", new System.Globalization.CultureInfo("es-ES"))</div>
+                        <div class="item-subtitle">Día completo</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item: Herramientas Requeridas -->
+            <div class="grid-item">
+                <div class="item-label">Herramientas Requeridas</div>
+                <div class="item-content tools-content">
+                    @if (toolsList.Count > 0)
+                    {
+                        <div class="tools-pills-container">
+                            @foreach (var tool in toolsList)
+                            {
+                                <span class="tool-pill">@tool</span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="item-text-wrapper">
+                            <div class="item-subtitle" style="font-style: italic;">Ninguna herramienta requerida</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <hr class="details-divider" />
+
+        <!-- Sección: Descripción y Objetivos -->
+        <div class="details-section">
+            <h2 class="details-section-title">
+                <i class="fa-regular fa-file-lines"></i> Descripción y Objetivos
+            </h2>
+            <div class="details-content-box">
+                @{
+                    var descLines = Model.Descripcion.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                    var paragraphs = new List<string>();
+                    var listItems = new List<string>();
+                    
+                    foreach (var line in descLines)
+                    {
+                        var trimmed = line.Trim();
+                        if (trimmed.StartsWith("*") || trimmed.StartsWith("-"))
+                        {
+                            listItems.Add(trimmed.Substring(1).Trim());
+                        }
+                        else if (!string.IsNullOrEmpty(trimmed))
+                        {
+                            paragraphs.Add(trimmed);
+                        }
+                    }
+                }
+                
+                @foreach (var para in paragraphs)
+                {
+                    <p class="description-paragraph">@para</p>
+                }
+                
+                @if (listItems.Count > 0)
+                {
+                    <ul class="description-list">
+                        @foreach (var item in listItems)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+
+        <!-- Sección: Notas de Campo -->
+        @if (!string.IsNullOrEmpty(Model.NotasCampo))
+        {
+            <div class="details-section">
+                <h2 class="details-section-title">
+                    <i class="fa-regular fa-clipboard"></i> Notas de Campo
+                </h2>
+                <div class="details-content-box notes-box">
+                    <p class="notes-text">“@Model.NotasCampo”</p>
+                </div>
+            </div>
+        }
+
+        <hr class="details-divider" />
+
+        <!-- Metadatos de la tarjeta -->
+        <div class="details-card-footer">
+            <span class="meta-item">Creado por: @Model.CreadoPor</span>
+            <span class="meta-item">Última actualización: @Model.FechaActualizacion.ToString("dd/MM/yyyy - HH:mm")</span>
+        </div>
+    </div>
+
+    <!-- Fila Inferior de Widgets (Fuera de la Tarjeta) -->
+    <div class="details-bottom-widgets">
+        <!-- Widget: Clima -->
+        <div class="bottom-widget-card">
+            <div class="widget-icon-circle climate-icon">
+                @{
+                    string climateIcon = "fa-sun";
+                    if (Model.ClimaEstado.ToLower().Contains("nublado")) climateIcon = "fa-cloud";
+                    else if (Model.ClimaEstado.ToLower().Contains("lluvia") || Model.ClimaEstado.ToLower().Contains("lluvioso")) climateIcon = "fa-cloud-showers-heavy";
+                    else if (Model.ClimaEstado.ToLower().Contains("viento")) climateIcon = "fa-wind";
+                }
+                <i class="fa-solid @climateIcon"></i>
+            </div>
+            <div class="widget-info-wrapper">
+                <span class="widget-label">Pronóstico Temp.</span>
+                <span class="widget-value">@Model.ClimaTemperatura (@Model.ClimaEstado)</span>
+            </div>
+        </div>
+
+        <!-- Widget: Colmenas en Riesgo -->
+        <div class="bottom-widget-card">
+            <div class="widget-icon-circle hives-icon">
+                <i class="fa-solid fa-circle-nodes"></i>
+            </div>
+            <div class="widget-info-wrapper">
+                <span class="widget-label">Colmenas en riesgo</span>
+                <span class="widget-value">@Model.ColmenasRiesgo</span>
+            </div>
+        </div>
+    </div>
+</div>

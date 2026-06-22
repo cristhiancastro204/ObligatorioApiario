@@ -33,43 +33,87 @@
                     <label class="form-label"><i class="fa-solid fa-location-dot"></i> Apiario</label>
                     <select name="NombreApiario" class="form-input form-select" required>
                         <option value="">Selecciona un apiario</option>
-                        @if(Model.NombreApiario == "Valle Dorado") { <option value="Valle Dorado" selected>Valle Dorado</option> } else { <option value="Valle Dorado">Valle Dorado</option> }
-                        @if(Model.NombreApiario == "Los Pinos") { <option value="Los Pinos" selected>Los Pinos</option> } else { <option value="Los Pinos">Los Pinos</option> }
-                        @if(Model.NombreApiario == "La Pradera") { <option value="La Pradera" selected>La Pradera</option> } else { <option value="La Pradera">La Pradera</option> }
-                        @if(Model.NombreApiario == "Serranía Sur") { <option value="Serranía Sur" selected>Serranía Sur</option> } else { <option value="Serranía Sur">Serranía Sur</option> }
+                        @if (ViewBag.Apiarios != null)
+                        {
+                            foreach (var apiario in (List<ObligatorioApiario.Models.Apiario>)ViewBag.Apiarios)
+                            {
+                                if (Model.NombreApiario == apiario.Nombre)
+                                {
+                                    <option value="@apiario.Nombre" selected>@apiario.Nombre</option>
+                                }
+                                else
+                                {
+                                    <option value="@apiario.Nombre">@apiario.Nombre</option>
+                                }
+                            }
+                        }
                     </select>
                 </div>
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha de Vencimiento</label>
+                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha Programada</label>
                     <input type="date" name="FechaVencimiento" class="form-input" value="@Model.FechaVencimiento.ToString("yyyy-MM-dd")" required />
                 </div>
             </div>
 
-            <!-- El campo de Asignar no es parte del modelo actual, pero lo dejamos visualmente por diseño -->
-            <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-user-plus"></i> Asignar a (Opcional)</label>
-                <div class="input-with-suffix">
-                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; color: #999;"></i>
-                    <input type="text" class="form-input" placeholder="Buscar apicultor..." style="padding-left: 45px;" />
+            <div class="form-row">
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-circle-info"></i> Estado</label>
+                    <select name="Estado" class="form-input form-select" required>
+                        <option value="Programada" selected="@(Model.Estado == "Programada")">Programada</option>
+                        <option value="En Progreso" selected="@(Model.Estado == "En Progreso")">En Progreso</option>
+                        <option value="Completada" selected="@(Model.Estado == "Completada")">Completada</option>
+                        <option value="Cancelada" selected="@(Model.Estado == "Cancelada")">Cancelada</option>
+                    </select>
+                </div>
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-exclamation"></i> Nivel de Prioridad</label>
+                    <div class="priority-selector" style="margin-bottom: 0;">
+                        <label class="priority-pill">
+                            @if(Model.NivelPrioridad == "Baja") { <input type="radio" name="NivelPrioridad" value="Baja" checked /> } else { <input type="radio" name="NivelPrioridad" value="Baja" /> }
+                            <div class="priority-dot baja"></div> Baja
+                        </label>
+                        <label class="priority-pill">
+                            @if(Model.NivelPrioridad == "Media") { <input type="radio" name="NivelPrioridad" value="Media" checked /> } else { <input type="radio" name="NivelPrioridad" value="Media" /> }
+                            <div class="priority-dot media"></div> Media
+                        </label>
+                        <label class="priority-pill">
+                            @if(Model.NivelPrioridad == "Alta") { <input type="radio" name="NivelPrioridad" value="Alta" checked /> } else { <input type="radio" name="NivelPrioridad" value="Alta" /> }
+                            <div class="priority-dot alta"></div> Alta
+                        </label>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-exclamation"></i> Nivel de Prioridad</label>
-                <div class="priority-selector">
-                    <label class="priority-pill">
-                        @if(Model.NivelPrioridad == "Baja") { <input type="radio" name="NivelPrioridad" value="Baja" checked /> } else { <input type="radio" name="NivelPrioridad" value="Baja" /> }
-                        <div class="priority-dot baja"></div> Baja
-                    </label>
-                    <label class="priority-pill">
-                        @if(Model.NivelPrioridad == "Media") { <input type="radio" name="NivelPrioridad" value="Media" checked /> } else { <input type="radio" name="NivelPrioridad" value="Media" /> }
-                        <div class="priority-dot media"></div> Media
-                    </label>
-                    <label class="priority-pill">
-                        @if(Model.NivelPrioridad == "Alta") { <input type="radio" name="NivelPrioridad" value="Alta" checked /> } else { <input type="radio" name="NivelPrioridad" value="Alta" /> }
-                        <div class="priority-dot alta"></div> Alta
-                    </label>
+                <label class="form-label"><i class="fa-solid fa-screwdriver-wrench"></i> Herramientas Requeridas (separadas por comas)</label>
+                <input type="text" name="HerramientasRequeridas" class="form-input" value="@Model.HerramientasRequeridas" placeholder="Ej: Ahumador, Kit Varroa, Espátula" />
+            </div>
+
+            <div class="form-row">
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-cloud-sun"></i> Clima</label>
+                    <select name="ClimaEstado" class="form-input form-select" required>
+                        <option value="Soleado" selected="@(Model.ClimaEstado == "Soleado")">Soleado</option>
+                        <option value="Nublado" selected="@(Model.ClimaEstado == "Nublado")">Nublado</option>
+                        <option value="Lluvioso" selected="@(Model.ClimaEstado == "Lluvioso")">Lluvioso</option>
+                        <option value="Templado" selected="@(Model.ClimaEstado == "Templado")">Templado</option>
+                        <option value="Viento Fuerte" selected="@(Model.ClimaEstado == "Viento Fuerte")">Viento Fuerte</option>
+                    </select>
                 </div>
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-temperature-half"></i> Temperatura</label>
+                    <input type="text" name="ClimaTemperatura" class="form-input" value="@Model.ClimaTemperatura" placeholder="Ej: 22ºC" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Colmenas en Riesgo</label>
+                <input type="text" name="ColmenasRiesgo" class="form-input" value="@Model.ColmenasRiesgo" placeholder="Ej: 2/16" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-clipboard"></i> Notas de Campo (Opcional)</label>
+                <textarea name="NotasCampo" class="form-input form-textarea" placeholder="Observaciones adicionales del campo...">@Model.NotasCampo</textarea>
             </div>
 
             <div class="form-row" style="margin-top: 3rem;">
@@ -99,16 +143,6 @@
                 <i class="fa-regular fa-sun"></i> 24°C
             </div>
             <p class="weather-desc">Perfecto para inspecciones de campo hoy.</p>
-        </div>
-
-        <!-- Manual de Salud -->
-        <div class="image-card">
-            <img src="https://images.unsplash.com/photo-1587049352847-81a56d773c1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Abejas en panal" />
-            <div class="image-card-body">
-                <h4>Manual de Salud</h4>
-                <p>Recursos para identificación de enfermedades.</p>
-                <a href="#" class="image-card-link">Leer más <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
         </div>
     </div>
 </div>

@@ -21,6 +21,7 @@ namespace ObligatorioApiario.Controllers
         // Acción GET: Muestra el formulario para crear una nueva tarea.
         public IActionResult Create()
         {
+            ViewBag.Apiarios = _context.Apiarios.ToList();
             return View(); // Retorna la vista asociada (Views/Tareas/Create.cshtml)
         }
 
@@ -40,7 +41,15 @@ namespace ObligatorioApiario.Controllers
                 // Si la prioridad viene nula o vacía, le asigna "Baja" por defecto.
                 NivelPrioridad = string.IsNullOrEmpty(tareaVM.NivelPrioridad) ? "Baja" : tareaVM.NivelPrioridad,
                 // Define un ícono fijo por defecto para la tarea.
-                Icono = "fa-solid fa-circle-check"
+                Icono = "fa-solid fa-circle-check",
+                Estado = string.IsNullOrEmpty(tareaVM.Estado) ? "Programada" : tareaVM.Estado,
+                HerramientasRequeridas = tareaVM.HerramientasRequeridas ?? "",
+                NotasCampo = tareaVM.NotasCampo ?? "",
+                CreadoPor = string.IsNullOrEmpty(tareaVM.CreadoPor) ? "Admin (Sistema)" : tareaVM.CreadoPor,
+                ClimaEstado = string.IsNullOrEmpty(tareaVM.ClimaEstado) ? "Soleado" : tareaVM.ClimaEstado,
+                ClimaTemperatura = string.IsNullOrEmpty(tareaVM.ClimaTemperatura) ? "22ºC" : tareaVM.ClimaTemperatura,
+                ColmenasRiesgo = string.IsNullOrEmpty(tareaVM.ColmenasRiesgo) ? "0/0" : tareaVM.ColmenasRiesgo,
+                FechaActualizacion = DateTime.Now
             };
 
             // Agrega la nueva tarea al contexto y guarda los cambios en la base de datos.
@@ -68,7 +77,15 @@ namespace ObligatorioApiario.Controllers
                 NombreApiario = t.NombreApiario,
                 FechaVencimiento = t.FechaVencimiento,
                 NivelPrioridad = t.NivelPrioridad,
-                Icono = t.Icono
+                Icono = t.Icono,
+                Estado = t.Estado,
+                HerramientasRequeridas = t.HerramientasRequeridas,
+                NotasCampo = t.NotasCampo,
+                CreadoPor = t.CreadoPor,
+                ClimaEstado = t.ClimaEstado,
+                ClimaTemperatura = t.ClimaTemperatura,
+                ColmenasRiesgo = t.ColmenasRiesgo,
+                FechaActualizacion = t.FechaActualizacion
             }).ToList();
 
             // Lógica de ordenamiento según la preferencia del usuario
@@ -93,6 +110,38 @@ namespace ObligatorioApiario.Controllers
             return View(tareasLista);
         }
 
+        // Acción GET: Muestra los detalles de una tarea específica.
+        public IActionResult Details(int id)
+        {
+            // Busca la tarea por su ID.
+            var t = _context.Tareas.FirstOrDefault(x => x.Id == id);
+            
+            // Si no se encuentra la tarea, retorna 404 Not Found.
+            if (t == null) return NotFound();
+
+            // Mapea la tarea a un ViewModel para enviarlo a la vista de detalles.
+            var tareaVM = new TareaViewModel
+            {
+                Id = t.Id,
+                Titulo = t.Titulo,
+                Descripcion = t.Descripcion,
+                NombreApiario = t.NombreApiario,
+                FechaVencimiento = t.FechaVencimiento,
+                NivelPrioridad = t.NivelPrioridad,
+                Icono = t.Icono,
+                Estado = t.Estado,
+                HerramientasRequeridas = t.HerramientasRequeridas,
+                NotasCampo = t.NotasCampo,
+                CreadoPor = t.CreadoPor,
+                ClimaEstado = t.ClimaEstado,
+                ClimaTemperatura = t.ClimaTemperatura,
+                ColmenasRiesgo = t.ColmenasRiesgo,
+                FechaActualizacion = t.FechaActualizacion
+            };
+
+            return View(tareaVM); // Retorna la vista Views/Tareas/Details.cshtml
+        }
+
         // Acción GET: Muestra el formulario para editar una tarea existente.
         // Recibe el 'id' de la tarea a editar.
         public IActionResult Edit(int id)
@@ -103,6 +152,8 @@ namespace ObligatorioApiario.Controllers
             // Si no se encuentra la tarea, retorna un error HTTP 404 (Not Found).
             if (t == null) return NotFound();
             
+            ViewBag.Apiarios = _context.Apiarios.ToList();
+
             // Mapea la tarea encontrada a un ViewModel para enviarlo a la vista de edición.
             var tareaVM = new TareaViewModel
             {
@@ -112,7 +163,15 @@ namespace ObligatorioApiario.Controllers
                 NombreApiario = t.NombreApiario,
                 FechaVencimiento = t.FechaVencimiento,
                 NivelPrioridad = t.NivelPrioridad,
-                Icono = t.Icono
+                Icono = t.Icono,
+                Estado = t.Estado,
+                HerramientasRequeridas = t.HerramientasRequeridas,
+                NotasCampo = t.NotasCampo,
+                CreadoPor = t.CreadoPor,
+                ClimaEstado = t.ClimaEstado,
+                ClimaTemperatura = t.ClimaTemperatura,
+                ColmenasRiesgo = t.ColmenasRiesgo,
+                FechaActualizacion = t.FechaActualizacion
             };
             return View(tareaVM); // Retorna la vista Views/Tareas/Edit.cshtml
         }
@@ -132,6 +191,13 @@ namespace ObligatorioApiario.Controllers
                 tareaExistente.FechaVencimiento = model.FechaVencimiento;
                 tareaExistente.NombreApiario = model.NombreApiario;
                 tareaExistente.NivelPrioridad = model.NivelPrioridad;
+                tareaExistente.Estado = model.Estado;
+                tareaExistente.HerramientasRequeridas = model.HerramientasRequeridas ?? "";
+                tareaExistente.NotasCampo = model.NotasCampo ?? "";
+                tareaExistente.ClimaEstado = model.ClimaEstado;
+                tareaExistente.ClimaTemperatura = model.ClimaTemperatura;
+                tareaExistente.ColmenasRiesgo = model.ColmenasRiesgo;
+                tareaExistente.FechaActualizacion = DateTime.Now;
                 
                 // Guarda los cambios aplicados en la base de datos.
                 _context.SaveChanges();

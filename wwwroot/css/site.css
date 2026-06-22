@@ -1524,3 +1524,424 @@ html {
 .task-card-dashed:hover .task-add-icon {
     transform: scale(1.1);
 }
+
+/* ====== DETALLES DE TAREA (DETALLES PREMIUM) ====== */
+.details-page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-bottom: 4rem;
+}
+
+.back-link-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.details-back-link {
+    color: var(--btn-primary-bg);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.details-back-link:hover {
+    color: var(--btn-primary-hover);
+    transform: translateX(-3px);
+}
+
+.task-details-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    border-top: 6px solid #eebb99; /* Borde superior crema-marrón de la imagen */
+    padding: 3rem;
+    margin-bottom: 2rem;
+    position: relative;
+    border-left: 1px solid #f2edd8;
+    border-right: 1px solid #f2edd8;
+    border-bottom: 1px solid #f2edd8;
+}
+
+.details-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.task-id-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.task-id-icon-box {
+    color: #8c5a3c;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+}
+
+.task-id-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #8c8577;
+    letter-spacing: 1px;
+}
+
+.details-task-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0 0 1.25rem 0;
+    line-height: 1.25;
+}
+
+.details-badges-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 2.5rem;
+}
+
+.details-status-badge, .details-priority-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+/* Colores de badges de Estado */
+.status-programada {
+    background-color: #fef3c7; /* Amber 100 */
+    color: #92400e; /* Amber 800 */
+}
+
+.status-programada .status-dot {
+    background-color: #b45309;
+}
+
+.status-enprogreso {
+    background-color: #e0f2fe; /* Sky 100 */
+    color: #0369a1; /* Sky 800 */
+}
+
+.status-enprogreso .status-dot {
+    background-color: #0284c7;
+}
+
+.status-completada {
+    background-color: #dcfce7; /* Green 100 */
+    color: #166534; /* Green 800 */
+}
+
+.status-completada .status-dot {
+    background-color: #15803d;
+}
+
+.status-cancelada {
+    background-color: #fee2e2; /* Red 100 */
+    color: #991b1b; /* Red 800 */
+}
+
+.status-cancelada .status-dot {
+    background-color: #b91c1c;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Colores de badges de Prioridad */
+.priority-alta {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.priority-media {
+    background-color: #ffedd5;
+    color: #c2410c;
+}
+
+.priority-baja {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+/* Grilla de Atributos */
+.details-attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 2rem;
+    column-gap: 3rem;
+    margin-bottom: 2.5rem;
+}
+
+.grid-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.item-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #a39b8c;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.item-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.item-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background-color: #f3ebd9;
+    color: #8c5a3c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.item-avatar-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #f0e1cf;
+    color: #8c5a3c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    border: 1px solid #e2d2c1;
+}
+
+.item-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.item-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2b2b2b;
+}
+
+.item-subtitle {
+    font-size: 0.85rem;
+    color: #7a7366;
+    font-weight: 500;
+}
+
+.tools-content {
+    align-items: flex-start;
+}
+
+.tools-pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.tool-pill {
+    background-color: #f3ebd9;
+    color: #8c5a3c;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.details-divider {
+    border: none;
+    border-top: 1px solid #f2ece0;
+    margin: 2rem 0;
+}
+
+/* Secciones de Contenido */
+.details-section {
+    margin-bottom: 2.5rem;
+}
+
+.details-section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 1.25rem 0;
+}
+
+.details-section-title i {
+    color: #8c5a3c;
+    font-size: 1.2rem;
+}
+
+.details-content-box {
+    background-color: #fbf9f4;
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    border: 1px solid #f2ece0;
+}
+
+.description-paragraph {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4a453c;
+    margin: 0 0 1.25rem 0;
+}
+
+.description-paragraph:last-child {
+    margin-bottom: 0;
+}
+
+.description-list {
+    margin: 1rem 0 0 0;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.description-list li {
+    font-size: 0.95rem;
+    color: #4a453c;
+    line-height: 1.5;
+    position: relative;
+    list-style-type: none;
+}
+
+.description-list li::before {
+    content: "•";
+    color: #d4a373;
+    font-size: 1.3rem;
+    position: absolute;
+    left: -1.2rem;
+    top: -0.15rem;
+}
+
+.notes-box {
+    border-left: 4px solid #d4a373;
+}
+
+.notes-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #5c5549;
+    font-style: italic;
+    margin: 0;
+}
+
+.details-card-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #a39b8c;
+    font-family: monospace;
+}
+
+/* Tarjetas Inferiores del Clima y Riesgo */
+.details-bottom-widgets {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.bottom-widget-card {
+    background-color: #fbf9f4;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid #f2ece0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+}
+
+.widget-icon-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.climate-icon {
+    background-color: #e6f6ec;
+    color: #2b9348;
+}
+
+.hives-icon {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.widget-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.widget-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #a39b8c;
+}
+
+.widget-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #2b2b2b;
+}
+
+/* Badges pequeños en listado de Index */
+.status-badge-mini {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+.status-badge-mini.status-programada {
+    background-color: #fff4e5;
+    color: #b58122;
+}
+
+.status-badge-mini.status-enprogreso {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.status-badge-mini.status-completada {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-badge-mini.status-cancelada {
+    background-color: #fee2e2;
+    color: #991b1b;
+}

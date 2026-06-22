@@ -30,47 +30,85 @@
                     <label class="form-label"><i class="fa-solid fa-location-dot"></i> Apiario</label>
                     <select name="NombreApiario" class="form-input form-select" required>
                         <option value="">Selecciona un apiario</option>
-                        <option value="Valle Dorado">Valle Dorado</option>
-                        <option value="Los Pinos">Los Pinos</option>
-                        <option value="La Pradera">La Pradera</option>
-                        <option value="Serranía Sur">Serranía Sur</option>
+                        @if (ViewBag.Apiarios != null)
+                        {
+                            foreach (var apiario in (List<ObligatorioApiario.Models.Apiario>)ViewBag.Apiarios)
+                            {
+                                <option value="@apiario.Nombre">@apiario.Nombre</option>
+                            }
+                        }
                     </select>
                 </div>
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha de Vencimiento</label>
+                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha Programada</label>
                     <input type="date" name="FechaVencimiento" class="form-input" required />
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-user-plus"></i> Asignar a (Opcional)</label>
-                <div class="input-with-suffix">
-                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; color: #999;"></i>
-                    <input type="text" class="form-input" placeholder="Buscar apicultor..." style="padding-left: 45px;" />
+            <div class="form-row">
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-circle-info"></i> Estado</label>
+                    <select name="Estado" class="form-input form-select" required>
+                        <option value="Programada" selected>Programada</option>
+                        <option value="En Progreso">En Progreso</option>
+                        <option value="Completada">Completada</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-exclamation"></i> Nivel de Prioridad</label>
+                    <div class="priority-selector" style="margin-bottom: 0;">
+                        <label class="priority-pill">
+                            <input type="radio" name="NivelPrioridad" value="Baja" />
+                            <div class="priority-dot baja"></div> Baja
+                        </label>
+                        <label class="priority-pill">
+                            <input type="radio" name="NivelPrioridad" value="Media" checked />
+                            <div class="priority-dot media"></div> Media
+                        </label>
+                        <label class="priority-pill">
+                            <input type="radio" name="NivelPrioridad" value="Alta" />
+                            <div class="priority-dot alta"></div> Alta
+                        </label>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-exclamation"></i> Nivel de Prioridad</label>
-                <div class="priority-selector">
-                    <label class="priority-pill">
-                        <input type="radio" name="NivelPrioridad" value="Baja" />
-                        <div class="priority-dot baja"></div> Baja
-                    </label>
-                    <label class="priority-pill">
-                        <input type="radio" name="NivelPrioridad" value="Media" checked />
-                        <div class="priority-dot media"></div> Media
-                    </label>
-                    <label class="priority-pill">
-                        <input type="radio" name="NivelPrioridad" value="Alta" />
-                        <div class="priority-dot alta"></div> Alta
-                    </label>
+                <label class="form-label"><i class="fa-solid fa-screwdriver-wrench"></i> Herramientas Requeridas (separadas por comas)</label>
+                <input type="text" name="HerramientasRequeridas" class="form-input" placeholder="Ej: Ahumador, Kit Varroa, Espátula" />
+            </div>
+
+            <div class="form-row">
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-cloud-sun"></i> Clima</label>
+                    <select name="ClimaEstado" class="form-input form-select" required>
+                        <option value="Soleado" selected>Soleado</option>
+                        <option value="Nublado">Nublado</option>
+                        <option value="Lluvioso">Lluvioso</option>
+                        <option value="Templado">Templado</option>
+                        <option value="Viento Fuerte">Viento Fuerte</option>
+                    </select>
                 </div>
+                <div class="col-half form-group">
+                    <label class="form-label"><i class="fa-solid fa-temperature-half"></i> Temperatura</label>
+                    <input type="text" name="ClimaTemperatura" class="form-input" placeholder="Ej: 22ºC" value="22ºC" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Colmenas en Riesgo</label>
+                <input type="text" name="ColmenasRiesgo" class="form-input" placeholder="Ej: 2/16" value="0/0" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-clipboard"></i> Notas de Campo (Opcional)</label>
+                <textarea name="NotasCampo" class="form-input form-textarea" placeholder="Observaciones adicionales del campo..."></textarea>
             </div>
 
             <div class="form-row" style="margin-top: 3rem;">
                 <button type="submit" class="btn-primary col-half" style="border-radius: 8px;">Crear Tarea</button>
-                <button type="button" class="btn-outline col-half" style="border-radius: 8px; color: #555; border-color: #555;">Cancelar</button>
+                <a asp-action="Index" class="btn-outline col-half" style="border-radius: 8px; color: #555; border-color: #555; text-decoration: none; display: flex; justify-content: center; align-items: center;">Cancelar</a>
             </div>
         </form>
     </div>
@@ -95,17 +133,6 @@
                 <i class="fa-regular fa-sun"></i> 24°C
             </div>
             <p class="weather-desc">Perfecto para inspecciones de campo hoy.</p>
-        </div>
-
-        <!-- Manual de Salud -->
-        <div class="image-card">
-            <!-- Usando imagen de abejas de Unsplash -->
-            <img src="https://images.unsplash.com/photo-1587049352847-81a56d773c1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Abejas en panal" />
-            <div class="image-card-body">
-                <h4>Manual de Salud</h4>
-                <p>Recursos para identificación de enfermedades.</p>
-                <a href="#" class="image-card-link">Leer más <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
         </div>
     </div>
 </div>
