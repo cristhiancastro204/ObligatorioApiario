@@ -7,11 +7,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (!string.IsNullOrEmpty(connectionString) && connectionString.StartsWith("postgres://"))
+if (!string.IsNullOrEmpty(connectionString))
 {
-    var uri = new Uri(connectionString);
-    var userInfo = uri.UserInfo.Split(':');
-    connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};Ssl Mode=Prefer;Trust Server Certificate=true;";
+    // Limpiamos comillas o espacios accidentales que hayas podido pegar
+    connectionString = connectionString.Trim(' ', '"', '\'');
+    
+    if (connectionString.StartsWith("postgres://") || connectionString.StartsWith("postgresql://"))
+    {
+        var uri = new Uri(connectionString);
+        var userInfo = uri.UserInfo.Split(':');
+        var password = userInfo.Length > 1 ? userInfo[1] : "";
+        var port = uri.Port > 0 ? uri.Port : 5432;
+        connectionString = $"Host={uri.Host};Port={port};Database={uri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={password};Ssl Mode=Prefer;Trust Server Certificate=true;";
+    }
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
