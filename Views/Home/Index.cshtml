@@ -110,8 +110,17 @@
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 12px 0;
+        padding: 12px;
         border-bottom: 1px solid #f0ebe1;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s ease;
+        border-radius: 8px;
+    }
+    
+    .task-item:hover {
+        background-color: rgba(212, 163, 115, 0.05);
+        transform: translateX(5px);
     }
     
     .task-item:last-child {
@@ -207,7 +216,7 @@
             {
                 foreach(var tarea in Model.TareasPendientes)
                 {
-                    <div class="task-item">
+                    <a asp-controller="Tareas" asp-action="Details" asp-route-id="@tarea.Id" class="task-item">
                         <div class="task-date">
                             <span class="day">@tarea.FechaVencimiento.ToString("dd")</span>
                             <span class="month">@tarea.FechaVencimiento.ToString("MMM")</span>
@@ -216,7 +225,7 @@
                             <h4>@tarea.Titulo</h4>
                             <p><i class="fa-solid fa-location-dot"></i> @tarea.NombreApiario</p>
                         </div>
-                    </div>
+                    </a>
                 }
             }
             else
