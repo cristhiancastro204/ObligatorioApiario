@@ -7,8 +7,9 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
 <style>
-    .dashboard-container {
+    .home-dashboard-wrapper {
         padding: 20px;
+        width: 100%;
         max-width: 1400px;
         margin: 0 auto;
     }
@@ -21,7 +22,7 @@
     
     .stat-card {
         flex: 1;
-        background: white;
+        background-color: var(--topbar-bg, #ffffff);
         border-radius: 12px;
         padding: 24px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -30,6 +31,8 @@
         gap: 20px;
         border-left: 4px solid #d4a373;
         transition: transform 0.2s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+        border-left-width: 4px;
     }
 
     .stat-card:hover {
@@ -70,18 +73,26 @@
     }
     
     .chart-container, .tasks-container, .map-container {
-        background: white;
+        background-color: var(--topbar-bg, #ffffff);
         border-radius: 12px;
         padding: 24px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0,0,0,0.05);
     }
     
     .chart-container {
         flex: 2;
+        min-width: 0;
     }
     
     .tasks-container {
         flex: 1;
+        min-width: 0;
+    }
+
+    .map-container {
+        width: 100%;
+        margin-top: 20px;
     }
     
     .section-title {
@@ -144,6 +155,7 @@
     
     #map {
         height: 400px;
+        width: 100%;
         border-radius: 8px;
         z-index: 1;
     }
@@ -154,7 +166,7 @@
     }
 </style>
 
-<div class="dashboard-container">
+<div class="home-dashboard-wrapper">
     
     <!-- Top Row: Stats -->
     <div class="stats-row">
