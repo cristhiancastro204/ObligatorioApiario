@@ -56,6 +56,10 @@ namespace ObligatorioApiario.Controllers
             int daysToSubtract = firstDayOfWeek == 0 ? 6 : firstDayOfWeek - 1;
             var startDate = firstDayOfMonth.AddDays(-daysToSubtract);
             
+            // Obtener todas las tareas y filtrar en memoria para evitar errores de traducción
+            // de fechas (zonas horarias) entre Entity Framework y PostgreSQL.
+            var todasLasTareas = _context.Tareas.ToList();
+
             // Generar 42 celdas (6 semanas) para cubrir todos los meses
             for (int i = 0; i < 42; i++)
             {
@@ -66,8 +70,7 @@ namespace ObligatorioApiario.Controllers
                     IsOtherMonth = currentDate.Month != targetDate.Month
                 };
                 
-                // Agregar dinámicamente las tareas programadas para este día desde la BD
-                var tareasDelDia = _context.Tareas
+                var tareasDelDia = todasLasTareas
                     .Where(t => t.FechaVencimiento.Date == currentDate.Date)
                     .ToList();
 
