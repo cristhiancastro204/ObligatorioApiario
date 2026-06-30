@@ -30,7 +30,7 @@
 
             <div class="form-row">
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-location-dot"></i> Apiario</label>
+                    <label class="form-label"><i class="fa-solid fa-location-dot"></i> Apiario <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <select name="NombreApiario" class="form-input form-select" required>
                         <option value="">Selecciona un apiario</option>
                         @if (ViewBag.Apiarios != null)
@@ -50,14 +50,14 @@
                     </select>
                 </div>
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha Programada</label>
+                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha Programada <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <input type="date" name="FechaVencimiento" class="form-input" value="@Model.FechaVencimiento.ToString("yyyy-MM-dd")" required />
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-circle-info"></i> Estado</label>
+                    <label class="form-label"><i class="fa-solid fa-circle-info"></i> Estado <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <select name="Estado" class="form-input form-select" required>
                         <option value="Programada" selected="@(Model.Estado == "Programada")">Programada</option>
                         <option value="En Progreso" selected="@(Model.Estado == "En Progreso")">En Progreso</option>
@@ -91,7 +91,7 @@
 
             <div class="form-row">
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-cloud-sun"></i> Clima</label>
+                    <label class="form-label"><i class="fa-solid fa-cloud-sun"></i> Clima <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <select name="ClimaEstado" class="form-input form-select" required>
                         <option value="Soleado" selected="@(Model.ClimaEstado == "Soleado")">Soleado</option>
                         <option value="Nublado" selected="@(Model.ClimaEstado == "Nublado")">Nublado</option>
@@ -101,13 +101,13 @@
                     </select>
                 </div>
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-temperature-half"></i> Temperatura</label>
+                    <label class="form-label"><i class="fa-solid fa-temperature-half"></i> Temperatura <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <input type="text" name="ClimaTemperatura" class="form-input" value="@Model.ClimaTemperatura" placeholder="Ej: 22ºC" required />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Colmenas en Riesgo</label>
+                <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Colmenas en Riesgo <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                 <input type="text" name="ColmenasRiesgo" class="form-input" value="@Model.ColmenasRiesgo" placeholder="Ej: 2/16" required />
             </div>
 

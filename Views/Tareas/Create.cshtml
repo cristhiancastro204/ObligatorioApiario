@@ -20,7 +20,7 @@
 
             <div class="form-row">
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-location-dot"></i> Apiario</label>
+                    <label class="form-label"><i class="fa-solid fa-location-dot"></i> Apiario <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <select name="NombreApiario" id="NombreApiario" class="form-input form-select" required>
                         <option value="">Selecciona un apiario</option>
                         @if (ViewBag.Apiarios != null)
@@ -33,13 +33,13 @@
                     </select>
                 </div>
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha Programada</label>
+                    <label class="form-label"><i class="fa-regular fa-calendar-days"></i> Fecha Programada <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <input type="date" name="FechaVencimiento" class="form-input" required value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-circle-info"></i> Estado</label>
+                <label class="form-label"><i class="fa-solid fa-circle-info"></i> Estado <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                 <select name="Estado" class="form-input form-select" required>
                     <option value="Programada" selected>Programada</option>
                     <option value="En Progreso">En Progreso</option>
@@ -55,7 +55,7 @@
 
             <div class="form-row">
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-cloud-sun"></i> Clima</label>
+                    <label class="form-label"><i class="fa-solid fa-cloud-sun"></i> Clima <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <select name="ClimaEstado" class="form-input form-select" required>
                         <option value="Soleado" selected>Soleado</option>
                         <option value="Nublado">Nublado</option>
@@ -65,13 +65,13 @@
                     </select>
                 </div>
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-temperature-half"></i> Temperatura</label>
+                    <label class="form-label"><i class="fa-solid fa-temperature-half"></i> Temperatura <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                     <input type="text" name="ClimaTemperatura" class="form-input" placeholder="Ej: 22ºC" value="22ºC" required />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Colmenas en Riesgo</label>
+                <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Colmenas en Riesgo <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                 <input type="text" name="ColmenasRiesgo" class="form-input" placeholder="Ej: 2/16" value="0/0" required />
             </div>
 

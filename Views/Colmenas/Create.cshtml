@@ -33,12 +33,12 @@
                     
                     <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 16px;">
                         <div class="form-group" style="flex: 1;">
-                            <label asp-for="CantidadAbejas" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">CANTIDAD DE ABEJAS</label>
+                            <label asp-for="CantidadAbejas" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">CANTIDAD DE ABEJAS <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                             <input asp-for="CantidadAbejas" class="form-input" style="width: 100%; padding: 10px 14px; border: 1.5px solid #e8e3dc; border-radius: 8px; font-size: 0.95rem; background-color: #fdfbf7;" type="number" min="0" />
                         </div>
 
                         <div class="form-group" style="flex: 1;">
-                            <label asp-for="TipoAbeja" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">TIPO DE ABEJA</label>
+                            <label asp-for="TipoAbeja" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">TIPO DE ABEJA <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                             <input asp-for="TipoAbeja" class="form-input" style="width: 100%; padding: 10px 14px; border: 1.5px solid #e8e3dc; border-radius: 8px; font-size: 0.95rem; background-color: #fdfbf7;" placeholder="Ej: Italiana, Carniola..." />
                         </div>
                     </div>
@@ -60,7 +60,7 @@
 
                     <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 16px;">
                         <div class="form-group" style="flex: 1;">
-                            <label asp-for="EstadoSalud" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">ESTADO DE SALUD</label>
+                            <label asp-for="EstadoSalud" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">ESTADO DE SALUD <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                             <select asp-for="EstadoSalud" class="form-input form-select" style="width: 100%; padding: 10px 14px; border: 1.5px solid #e8e3dc; border-radius: 8px; font-size: 0.95rem; background-color: #fdfbf7; color: #2d261e; font-weight: 600;">
                                 <option value="Saludable">Saludable</option>
                                 <option value="Fuerte">Fuerte</option>
@@ -71,19 +71,19 @@
                         </div>
 
                         <div class="form-group" style="flex: 1;">
-                            <label asp-for="CantidadMarcos" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">CANTIDAD DE MARCOS</label>
+                            <label asp-for="CantidadMarcos" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">CANTIDAD DE MARCOS <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                             <input asp-for="CantidadMarcos" class="form-input" style="width: 100%; padding: 10px 14px; border: 1.5px solid #e8e3dc; border-radius: 8px; font-size: 0.95rem; background-color: #fdfbf7;" type="number" min="1" max="20" />
                         </div>
                     </div>
 
                     <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 0;">
                         <div class="form-group" style="flex: 1;">
-                            <label asp-for="AnioReina" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">AÑO DE LA REINA</label>
+                            <label asp-for="AnioReina" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">AÑO DE LA REINA <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                             <input asp-for="AnioReina" class="form-input" style="width: 100%; padding: 10px 14px; border: 1.5px solid #e8e3dc; border-radius: 8px; font-size: 0.95rem; background-color: #fdfbf7;" type="number" min="2020" max="2030" />
                         </div>
 
                         <div class="form-group" style="flex: 1;">
-                            <label asp-for="FechaInstalacion" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">FECHA DE INSTALACIÓN</label>
+                            <label asp-for="FechaInstalacion" class="form-label" style="font-size: 0.8rem; font-weight: 700; color: #7a6e62; letter-spacing: 0.5px;">FECHA DE INSTALACIÓN <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
                             <input asp-for="FechaInstalacion" class="form-input" style="width: 100%; padding: 10px 14px; border: 1.5px solid #e8e3dc; border-radius: 8px; font-size: 0.95rem; background-color: #fdfbf7;" type="date" />
                         </div>
                     </div>
