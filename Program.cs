@@ -1,9 +1,8 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
-
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 using ObligatorioApiario.Data;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
