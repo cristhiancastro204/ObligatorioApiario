@@ -150,6 +150,10 @@
         text-transform: uppercase;
     }
     
+    .task-info {
+        flex-grow: 1;
+    }
+    
     .task-info h4 {
         margin: 0 0 4px 0;
         font-size: 1rem;
@@ -160,6 +164,30 @@
         margin: 0;
         font-size: 0.85rem;
         color: #7a6e62;
+    }
+    
+    .task-priority-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .priority-alta {
+        background-color: rgba(229, 152, 155, 0.2);
+        color: #c62828;
+    }
+    
+    .priority-media {
+        background-color: rgba(212, 163, 115, 0.2);
+        color: #d48e45;
+    }
+    
+    .priority-baja {
+        background-color: rgba(163, 177, 138, 0.2);
+        color: #386641;
     }
     
     #map {
@@ -224,6 +252,20 @@
                         <div class="task-info">
                             <h4>@tarea.Titulo</h4>
                             <p><i class="fa-solid fa-location-dot"></i> @tarea.NombreApiario</p>
+                        </div>
+                        <div class="task-priority">
+                            @if(tarea.NivelPrioridad == "Alta")
+                            {
+                                <span class="task-priority-badge priority-alta">Alta</span>
+                            }
+                            else if(tarea.NivelPrioridad == "Media")
+                            {
+                                <span class="task-priority-badge priority-media">Media</span>
+                            }
+                            else
+                            {
+                                <span class="task-priority-badge priority-baja">Baja</span>
+                            }
                         </div>
                     </a>
                 }
