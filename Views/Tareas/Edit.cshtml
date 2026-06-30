@@ -91,8 +91,8 @@
 
             <div class="form-row">
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-cloud-sun"></i> Clima <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
-                    <select name="ClimaEstado" class="form-input form-select" required>
+                    <label class="form-label"><i class="fa-solid fa-cloud-sun"></i> Clima</label>
+                    <select name="ClimaEstado" class="form-input form-select">
                         <option value="Soleado" selected="@(Model.ClimaEstado == "Soleado")">Soleado</option>
                         <option value="Nublado" selected="@(Model.ClimaEstado == "Nublado")">Nublado</option>
                         <option value="Lluvioso" selected="@(Model.ClimaEstado == "Lluvioso")">Lluvioso</option>
@@ -101,14 +101,14 @@
                     </select>
                 </div>
                 <div class="col-half form-group">
-                    <label class="form-label"><i class="fa-solid fa-temperature-half"></i> Temperatura <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
-                    <input type="text" name="ClimaTemperatura" class="form-input" value="@Model.ClimaTemperatura" placeholder="Ej: 22ºC" required />
+                    <label class="form-label"><i class="fa-solid fa-temperature-half"></i> Temperatura</label>
+                    <input type="text" name="ClimaTemperatura" class="form-input" value="@Model.ClimaTemperatura" placeholder="Ej: 22ºC" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Colmenas en Riesgo <i class="fa-solid fa-circle-exclamation required-icon" title="Campo obligatorio"></i></label>
-                <input type="text" name="ColmenasRiesgo" class="form-input" value="@Model.ColmenasRiesgo" placeholder="Ej: 2/16" required />
+                <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Colmenas en Riesgo</label>
+                <input type="text" name="ColmenasRiesgo" class="form-input" value="@Model.ColmenasRiesgo" placeholder="Ej: 2/16" />
             </div>
 
             <div class="form-group">

@@ -11,7 +11,6 @@ namespace ObligatorioApiario.Models
         [Required(ErrorMessage = "El título es requerido")]
         public string Titulo { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La descripción es requerida")]
         public string Descripcion { get; set; } = string.Empty;
 
         [Required]

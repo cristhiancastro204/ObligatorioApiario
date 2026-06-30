@@ -23,10 +23,10 @@ namespace ObligatorioApiario.Models
         public ICollection<CosechaColmena> HistorialCosechas { get; set; } = new List<CosechaColmena>();
 
         [Display(Name = "Tipo de Abeja")]
-        public string TipoAbeja { get; set; } = string.Empty;
+        public string TipoAbeja { get; set; } = "Desconocida";
 
         [Display(Name = "Año de la Reina")]
-        public int AnioReina { get; set; } = DateTime.Now.Year;
+        public int? AnioReina { get; set; }
 
         [Display(Name = "Estado de Salud")]
         public string EstadoSalud { get; set; } = "Saludable";
