@@ -1,10 +1,11 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ObligatorioApiario.Models;
 
 namespace ObligatorioApiario.Controllers;
 
-public class HomeController : Controller
+[Microsoft.AspNetCore.Authorization.Authorize]
+    public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
@@ -29,3 +30,4 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+

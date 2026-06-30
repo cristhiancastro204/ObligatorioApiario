@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ObligatorioApiario.Data;
 using ObligatorioApiario.Models;
@@ -7,32 +7,33 @@ namespace ObligatorioApiario.Controllers
 {
     // Controlador responsable de manejar las solicitudes HTTP relacionadas con las Tareas.
     // Hereda de Controller, lo que le da funcionalidades para retornar vistas y manejar peticiones web.
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class TareasController : Controller
     {
-        // Variable de solo lectura para interactuar con la base de datos a través de Entity Framework Core.
+        // Variable de solo lectura para interactuar con la base de datos a travÃ©s de Entity Framework Core.
         private readonly ApplicationDbContext _context;
 
         // Constructor del controlador. Inyecta el contexto de la base de datos (ApplicationDbContext) 
-        // para que pueda ser utilizado en los diferentes métodos (acciones) del controlador.
+        // para que pueda ser utilizado en los diferentes mÃ©todos (acciones) del controlador.
         public TareasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // Acción GET: Muestra el formulario para crear una nueva tarea.
+        // AcciÃ³n GET: Muestra el formulario para crear una nueva tarea.
         public IActionResult Create()
         {
             ViewBag.Apiarios = _context.Apiarios.ToList();
             return View(); // Retorna la vista asociada (Views/Tareas/Create.cshtml)
         }
 
-        // Acción POST: Recibe los datos del formulario para procesar y guardar las nuevas tareas por colmena.
+        // AcciÃ³n POST: Recibe los datos del formulario para procesar y guardar las nuevas tareas por colmena.
         [HttpPost]
         public IActionResult Create(CreateTareasViewModel model)
         {
             if (model.TareasColmenas == null || !model.TareasColmenas.Any(tc => !string.IsNullOrWhiteSpace(tc.Titulo)))
             {
-                // Si no se ingresó ninguna tarea, volvemos a la vista (se podría agregar un mensaje de error)
+                // Si no se ingresÃ³ ninguna tarea, volvemos a la vista (se podrÃ­a agregar un mensaje de error)
                 ViewBag.Apiarios = _context.Apiarios.ToList();
                 return View();
             }
@@ -54,7 +55,7 @@ namespace ObligatorioApiario.Controllers
                         NotasCampo = tc.NotasCampo ?? "",
                         CreadoPor = "Admin (Sistema)",
                         ClimaEstado = string.IsNullOrEmpty(model.ClimaEstado) ? "Soleado" : model.ClimaEstado,
-                        ClimaTemperatura = string.IsNullOrEmpty(model.ClimaTemperatura) ? "22ºC" : model.ClimaTemperatura,
+                        ClimaTemperatura = string.IsNullOrEmpty(model.ClimaTemperatura) ? "22ÂºC" : model.ClimaTemperatura,
                         ColmenasRiesgo = string.IsNullOrEmpty(model.ColmenasRiesgo) ? "0/0" : model.ColmenasRiesgo,
                         FechaActualizacion = DateTime.Now,
                         ColmenaId = tc.ColmenaId
@@ -85,15 +86,15 @@ namespace ObligatorioApiario.Controllers
             return Json(colmenas);
         }
         
-        // Acción GET: Muestra la lista de tareas. 
-        // Permite recibir un parámetro 'ordenarPor' para decidir cómo listar los datos (por defecto ordena por "prioridad").
+        // AcciÃ³n GET: Muestra la lista de tareas. 
+        // Permite recibir un parÃ¡metro 'ordenarPor' para decidir cÃ³mo listar los datos (por defecto ordena por "prioridad").
         public IActionResult Index(string ordenarPor = "prioridad")
         {
-            // Obtiene todas las tareas de la base de datos, incluyendo la información de la Colmena asociada.
+            // Obtiene todas las tareas de la base de datos, incluyendo la informaciÃ³n de la Colmena asociada.
             var tareasDb = _context.Tareas.Include(t => t.Colmena).ToList();
 
             // Mapea la lista de modelos de dominio (Tarea) a una lista de modelos de vista (TareaViewModel)
-            // para enviar solo la información necesaria a la interfaz.
+            // para enviar solo la informaciÃ³n necesaria a la interfaz.
             var tareasLista = tareasDb.Select(t => new TareaViewModel
             {
                 Id = t.Id,
@@ -114,7 +115,7 @@ namespace ObligatorioApiario.Controllers
                 IdentificadorColmena = t.Colmena?.Identificador
             }).ToList();
 
-            // Lógica de ordenamiento según la preferencia del usuario
+            // LÃ³gica de ordenamiento segÃºn la preferencia del usuario
             if (ordenarPor == "fecha")
             {
                 // Ordena la lista de tareas por fecha de vencimiento ascendente.
@@ -136,7 +137,7 @@ namespace ObligatorioApiario.Controllers
             return View(tareasLista);
         }
 
-        // Acción GET: Muestra los detalles de una tarea específica.
+        // AcciÃ³n GET: Muestra los detalles de una tarea especÃ­fica.
         public IActionResult Details(int id)
         {
             // Busca la tarea por su ID.
@@ -168,7 +169,7 @@ namespace ObligatorioApiario.Controllers
             return View(tareaVM); // Retorna la vista Views/Tareas/Details.cshtml
         }
 
-        // Acción GET: Muestra el formulario para editar una tarea existente.
+        // AcciÃ³n GET: Muestra el formulario para editar una tarea existente.
         // Recibe el 'id' de la tarea a editar.
         public IActionResult Edit(int id)
         {
@@ -180,7 +181,7 @@ namespace ObligatorioApiario.Controllers
             
             ViewBag.Apiarios = _context.Apiarios.ToList();
 
-            // Mapea la tarea encontrada a un ViewModel para enviarlo a la vista de edición.
+            // Mapea la tarea encontrada a un ViewModel para enviarlo a la vista de ediciÃ³n.
             var tareaVM = new TareaViewModel
             {
                 Id = t.Id,
@@ -202,7 +203,7 @@ namespace ObligatorioApiario.Controllers
             return View(tareaVM); // Retorna la vista Views/Tareas/Edit.cshtml
         }
 
-        // Acción POST: Recibe los datos actualizados del formulario de edición y guarda los cambios.
+        // AcciÃ³n POST: Recibe los datos actualizados del formulario de ediciÃ³n y guarda los cambios.
         [HttpPost]
         public IActionResult Edit(int id, TareaViewModel model)
         {
@@ -233,7 +234,7 @@ namespace ObligatorioApiario.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Acción GET: Muestra una vista de confirmación para eliminar una tarea.
+        // AcciÃ³n GET: Muestra una vista de confirmaciÃ³n para eliminar una tarea.
         // Recibe el 'id' de la tarea que se desea eliminar.
         public IActionResult Delete(int id)
         {
@@ -243,7 +244,7 @@ namespace ObligatorioApiario.Controllers
             // Si la tarea no existe, retorna 404 Not Found.
             if (t == null) return NotFound();
             
-            // Pasa la información a un ViewModel para mostrar los detalles al usuario antes de confirmar la eliminación.
+            // Pasa la informaciÃ³n a un ViewModel para mostrar los detalles al usuario antes de confirmar la eliminaciÃ³n.
             var tareaVM = new TareaViewModel
             {
                 Id = t.Id,
@@ -258,8 +259,8 @@ namespace ObligatorioApiario.Controllers
             return View(tareaVM); // Retorna la vista Views/Tareas/Delete.cshtml
         }
 
-        // Acción POST: Confirma y realiza la eliminación de la tarea de la base de datos.
-        // Se utiliza el atributo ActionName("Delete") porque el método no puede llamarse Delete igual que el GET al tener los mismos parámetros.
+        // AcciÃ³n POST: Confirma y realiza la eliminaciÃ³n de la tarea de la base de datos.
+        // Se utiliza el atributo ActionName("Delete") porque el mÃ©todo no puede llamarse Delete igual que el GET al tener los mismos parÃ¡metros.
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
@@ -278,3 +279,4 @@ namespace ObligatorioApiario.Controllers
         }
     }
 }
+

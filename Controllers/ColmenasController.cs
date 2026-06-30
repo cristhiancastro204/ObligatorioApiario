@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ObligatorioApiario.Data;
@@ -6,6 +6,7 @@ using ObligatorioApiario.Models;
 
 namespace ObligatorioApiario.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class ColmenasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -50,7 +51,7 @@ namespace ObligatorioApiario.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Obtener todas las colmenas para calcular el máximo Identificador actual
+                // Obtener todas las colmenas para calcular el mÃ¡ximo Identificador actual
                 var colmenasExistentes = await _context.Colmenas.ToListAsync();
                 int maxNumero = 0;
                 
@@ -199,3 +200,4 @@ namespace ObligatorioApiario.Controllers
         }
     }
 }
+

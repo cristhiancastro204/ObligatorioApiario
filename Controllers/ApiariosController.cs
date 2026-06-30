@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ObligatorioApiario.Data;
 using ObligatorioApiario.Models;
 
 namespace ObligatorioApiario.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class ApiariosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -128,3 +129,4 @@ namespace ObligatorioApiario.Controllers
         }
     }
 }
+

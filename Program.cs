@@ -1,5 +1,6 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using ObligatorioApiario.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,12 +26,38 @@ if (!string.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     context.Database.Migrate();
+
+    try
+    {
+        await DataSeeder.SeedRolesAndAdminAsync(scope.ServiceProvider);
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Ocurrió un error al crear los roles y el administrador.");
+    }
 }
 
 var supportedCultures = new[] { new CultureInfo("en-US") };
@@ -52,6 +79,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();

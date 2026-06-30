@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ObligatorioApiario.Data;
 using ObligatorioApiario.Models;
 using System.Globalization;
 
 namespace ObligatorioApiario.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class CalendarioController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +19,7 @@ namespace ObligatorioApiario.Controllers
         {
             var targetDate = DateTime.Now;
 
-            // Ajustar si pasamos año y mes por parámetro
+            // Ajustar si pasamos aÃ±o y mes por parÃ¡metro
             if (year.HasValue && month.HasValue)
             {
                 // Prevenir excepciones si los valores son raros
@@ -43,7 +44,7 @@ namespace ObligatorioApiario.Controllers
                 NextMonth = targetDate.AddMonths(1).Month
             };
 
-            // Nombre del mes en español
+            // Nombre del mes en espaÃ±ol
             TextInfo textInfo = new CultureInfo("es-ES", false).TextInfo;
             string monthName = new CultureInfo("es-ES").DateTimeFormat.GetMonthName(targetDate.Month);
             viewModel.MonthName = textInfo.ToTitleCase(monthName.ToLower());
@@ -56,7 +57,7 @@ namespace ObligatorioApiario.Controllers
             int daysToSubtract = firstDayOfWeek == 0 ? 6 : firstDayOfWeek - 1;
             var startDate = firstDayOfMonth.AddDays(-daysToSubtract);
             
-            // Obtener todas las tareas y filtrar en memoria para evitar errores de traducción
+            // Obtener todas las tareas y filtrar en memoria para evitar errores de traducciÃ³n
             // de fechas (zonas horarias) entre Entity Framework y PostgreSQL.
             var todasLasTareas = _context.Tareas.ToList();
 
@@ -76,7 +77,7 @@ namespace ObligatorioApiario.Controllers
 
                 foreach (var tarea in tareasDelDia)
                 {
-                    // Asignar color de evento según prioridad (Alta = rojo, Media/Baja = amarillo)
+                    // Asignar color de evento segÃºn prioridad (Alta = rojo, Media/Baja = amarillo)
                     string typeClass = "yellow";
                     if (tarea.NivelPrioridad == "Alta") typeClass = "red";
                     
@@ -95,3 +96,4 @@ namespace ObligatorioApiario.Controllers
         }
     }
 }
+

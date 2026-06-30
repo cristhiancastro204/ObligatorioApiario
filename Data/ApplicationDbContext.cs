@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using ObligatorioApiario.Models;
 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 namespace ObligatorioApiario.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
