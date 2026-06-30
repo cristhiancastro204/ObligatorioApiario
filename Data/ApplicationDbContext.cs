@@ -29,6 +29,29 @@ namespace ObligatorioApiario.Data
                 .WithMany(c => c.HistorialCosechas)
                 .HasForeignKey(cc => cc.ColmenaId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // POSTGRESQL FIX: Convert all DateTime properties to UTC before saving, 
+            // and back from UTC when reading, to avoid Npgsql timestamp strictness errors.
+            var dateTimeConverter = new Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter<DateTime, DateTime>(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+            var nullableDateTimeConverter = new Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter<DateTime?, DateTime?>(
+                v => v.HasValue ? v.Value.ToUniversalTime() : v,
+                v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (entityType.IsKeyless) continue;
+
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                        property.SetValueConverter(dateTimeConverter);
+                    else if (property.ClrType == typeof(DateTime?))
+                        property.SetValueConverter(nullableDateTimeConverter);
+                }
+            }
         }
     }
 }
