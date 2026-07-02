@@ -1,0 +1,67 @@
+========================================================================
+PUNTO PARA EL HITO 3: INCREMENTOS O ITERACIONES DEFINIDAS
+========================================================================
+
+Siguiendo nuestra metodología de Scrum Simplificado orientada a la entrega continua de valor (Lean), el desarrollo del sistema se ha dividido en cuatro iteraciones principales. Al finalizar cada iteración, se entregará a Zánganos S.A. un incremento de software 100% funcional.
+
+Iteración 1: Fundación y Trazabilidad Básica (Gestión de Infraestructura)
+- Objetivo: Establecer la base del sistema para que Matías pueda digitalizar su infraestructura física y abandonar el uso del papel.
+- Historias de Usuario abordadas:
+  * Registrar la información de cada colmena y apiario para tener un historial organizado.
+  * Identificar si una colmena está enferma, necesita cambio de reina o tuvo enjambrazón.
+- Entregable (Incremento): Módulos de ABM (Alta, Baja, Modificación) de Apiarios y Colmenas. El usuario podrá visualizar en una tabla el estado de salud y la ubicación de sus 800 colmenas en tiempo real.
+
+Iteración 2: Logística de Campo y Control Sanitario (Visitas y Tratamientos)
+- Objetivo: Solucionar los problemas de olvidos logísticos al viajar a Rivera y prevenir la pérdida de abejas por falta de medicación.
+- Historias de Usuario abordadas:
+  * Planificar visitas indicando los bastidores y herramientas necesarias.
+  * Saber qué colmenas ya fueron revisadas durante una visita.
+  * Registrar tratamientos sanitarios para no olvidar las segundas dosis.
+- Entregable (Incremento): Módulo de planificación de visitas con checklist preventivo de herramientas. Implementación de un registro de revisión in-situ y un panel de alertas tempranas para dosis médicas pendientes.
+
+Iteración 3: Trazabilidad de Producción y Estacionalidad (Cosechas)
+- Objetivo: Resolver el problema de no saber de dónde proviene cada barril de miel y adaptar el flujo de trabajo al clima.
+- Historias de Usuario abordadas:
+  * Registrar cuánta miel produjo cada colmena para saber el origen de cada barril.
+  * Diferenciar las operaciones según la temporada (ej. cuidado intensivo en invierno).
+- Entregable (Incremento): Módulo de cosechas que vincula directamente los kilogramos de los barriles con el ID de la colmena de origen. Lógica interna que adapta o restringe las operaciones del sistema si la temporada marcada es invierno.
+
+Iteración 4: Burocracia y Reportes Oficiales
+- Objetivo: Automatizar los requerimientos legales para ahorrar tiempo administrativo.
+- Historias de Usuario abordadas:
+  * Generar formularios para el Ministerio de Ganadería de forma automática.
+- Entregable (Incremento): Funcionalidad de exportación de datos (PDF/Excel) que toma la información del historial productivo y la formatea según las exigencias del Ministerio de Ganadería.
+
+Iteración 5: Optimización para Entorno Rural y Estadísticas Avanzadas (PWA)
+- Objetivo: Asegurar que Matías pueda usar el sistema en el medio del monte sin señal y facilitar la toma de decisiones a largo plazo.
+- Requerimientos abordados:
+  * Mostrar un historial de producción que permita comparar rendimientos (Historia de Usuario).
+  * Estar disponible sin conexión a internet en zonas rurales sin señal (Requerimiento No Funcional).
+- Entregable (Incremento): Implementación de un Dashboard visual con gráficas comparativas de rendimiento por apiario. Además, se añade soporte Offline (tecnología Progressive Web App - PWA) que permite guardar los datos localmente en el celular cuando no hay señal, sincronizándolos automáticamente con el servidor al recuperar la conexión.
+
+
+
+========================================================================
+MATERIAL PARA LA DEFENSA DEL PROYECTO 
+(Cómo justificar dónde se resuelve el riesgo logístico y sanitario en SQL)
+========================================================================
+
+Si el profesor pregunta: "¿En qué parte exacta de la base de datos se mitigaron los riesgos de olvido de herramientas y pérdida de abejas por falta de medicación?"
+
+Respuesta estructurada:
+
+1. El problema de "olvidar las herramientas" (Riesgo Logístico)
+En el mundo real, viajar a Rivera sin equipo es una pérdida de dinero.
+¿Dónde está resuelto en el código SQL?
+- En la tabla "Planifica": Obliga a que cada Visita se asocie con una Herramienta y una Cantidad.
+- En el Trigger "trg_ValidarCantidadHerramientas": Impide de forma absoluta que el sistema guarde una cantidad en cero (RAISERROR). Esto obliga al apicultor a declarar su inventario exacto antes de viajar, previniendo el olvido.
+
+2. El problema de "olvidar los remedios/segundas dosis" (Riesgo Sanitario)
+Olvidar la segunda dosis hace que la peste vuelva y la colmena muera.
+¿Dónde está resuelto en el código SQL?
+- En la tabla "Tratamientos": La columna "Cant_Dosis INT NOT NULL" declara cuántas veces hay que medicar a la colmena.
+- En la tabla intermedia "Aplica": Registra el evento real de cuando se le da la medicina a una colmena específica.
+- En las Consultas (Consulta C1): Utilizamos un "LEFT JOIN Aplica ap ... WHERE ap.ID_Colmena IS NULL" para que el sistema detecte de inmediato qué colmenas vulnerables jamás recibieron su tratamiento. 
+
+Resumen final para el profesor:
+"El riesgo logístico lo mitigamos con la tabla Planifica y un Trigger restrictivo que impide registrar inventarios nulos. El riesgo sanitario lo cubrimos separando los Tratamientos (que guardan la exigencia de dosis) de la tabla Aplica (que registra el hecho), cruzando ambas tablas para generar alertas de colmenas no medicadas."
